@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "AddTech";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<TechCharacteristic>
+
+@*<div style="width:50%; margin-left:40%; padding:50px;">
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li>@item.TechCharacteristicId - @item.TechCharacteristicName</li>
+        }
+    </ul>
+
+</div>*@
+
+<div class="techs">
+    <table>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TechCharacteristicName</td>
+                    <td><a href="/Admin/TechEdit/@item.TechCharacteristicId"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                    <td><a href="/Admin/TechDelete/@item.TechCharacteristicId"><i class="fa-solid fa-trash"></i></a></td>
+                </tr>
+            }
+           
+    </table>
+</div>

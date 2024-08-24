@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "BigCampaign";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model List<BigCampaign>
+
+<div class="techs">
+    <table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><img src="~/BigCompany/@item.BigCampaignPicture" width="100px" height="100px" /></td>
+                <td><a asp-action="DeleteBigCampaign" asp-controller="admin" asp-route-id="@item.BigCampaignId"><i class="fa-solid fa-trash"></i></a></td>
+            </tr>
+        }
+
+    </table>
+</div>

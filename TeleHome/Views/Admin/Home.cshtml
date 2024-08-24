@@ -1,0 +1,369 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@*@model List<Product>*@
+
+<div id="main-content">
+    <form id="search-form" method="post">
+        <div class="row my-3">
+            <div class="col-md-8 m-auto">
+                <input id="search-input" type="text" class="form-control" placeholder="Axtar..." />
+            </div>
+            @* <div class="col-md-3">
+            <select id="sub-category-select" class="form-control">
+            @foreach (SubCategory item in ViewBag.Sub)
+            {
+            <option value="@item.SubCategoryId">@item.SubCategoryName</option>
+            }
+            </select>
+            </div>
+            <div class="col-md-3">
+            <select id="deep-category-select" class="form-control">
+            @foreach (DeepCategory item in ViewBag.Deep)
+            {
+            <option value="@item.DeepCategoryId">@item.DeepCategoryName</option>
+            }
+            </select>
+            </div>*@
+        </div>
+    </form>
+    <table class="table" id="product-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Adı</th>
+                <th>Alt kateqoriya</th>
+                <th class="text-center">Şəkil</th>
+                <th>Qiymət</th>
+                <th>Tarix</th>
+                <th>Stok</th>
+                <th>Aktivlik</th>
+                <th class="text-center" colspan="3"><a href="~/admin/newproduct"><i class="fa-solid fa-plus"></i></a></th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @foreach (Product item in ViewBag.ProductList)
+            {
+                <tr postId="@item.ProductId">
+                    <th>@(ViewBag.ProductList.IndexOf(item) + 1)</th>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductDeepCategory?.DeepCategoryName</td>
+                    <td style="width:20%;" class="text-center"><img class="skle" src="~/sekiller/@item.ProductFirstPhotoUrl" /></td>
+                    <td>@item.ProductPrice ₼</td>
+                    <td>@(((DateTime)item.ProductDate).ToString("dd-MMM-yyyy")) </td>
+                    <td class="stock">@(item.ProductIsSctock == true ? "Stokda var" : "Stokda yoxdur")</td>
+                    <td class="activ">@(item.ProductIsActive == true ? "Aktivdir" : "Passivdir")</td>
+                    <td class="text-center"><a class="text-success" href="~/admin/editproduct/@item.ProductId"><i class="fas fa-edit text-success"></i></a></td>
+                    <td class="text-center"><a class="text-black" data-productid="@item.ProductId" onclick="postactive('@item.ProductId')"><i class="fa-solid act @(item.ProductIsActive==true ? "fa-a" : "fa-p")"></i></a></td>
+                    <td class="text-center"><a class="text-primary" data-productid="@item.ProductId" onclick="postrecyle('@item.ProductId')"><i class="fas fa-recycle @(item.ProductIsSctock==true ? "text-success" : "text-danger")"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example" id="first">
+        <ul class="pagination justify-content-center my-3">
+            @{
+                int pgf = !string.IsNullOrEmpty(Context.Request.Query["page"]) ? int.Parse(Context.Request.Query["page"]) : 0;
+            }
+            <li class="page-item @(pgf==0 ? "disabled" : "")">
+                <a class="page-link" href="?page=@(pgf-1)">Geri</a>
+            </li>
+            @for (int i = 0; i < ViewBag.PageCount; i++)
+            {
+                <li class="page-item @(pgf == i ? "active" : "")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+            }
+            <li class="page-item @((pgf == (ViewBag.PageCount-1)) ? "disabled": "")">
+                <a class="page-link" href="?page=@(pgf + 1)">İrəli</a>
+            </li>
+        </ul>
+    </nav>
+    <nav id="pagination" aria-label="Page navigation example">
+        <ul class="pagination justify-content-center my-3">
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .skle {
+        width: 25%;
+    }
+
+    @@media(max-width:768px) {
+        .skle {
+            width: 100% !important;
+        }
+    }
+</style>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#pagination').on('click', '.page-link', function (event) {
+                event.preventDefault();
+                const page = $(this).data('page');
+                console.log(page)
+                performSearch(page);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            let searchTimeout;
+            const form = document.getElementById('search-form');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                performSearch(0);
+            });
+
+            function handleSearchInputChange(event) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function () {
+                    performSearch(0);
+                }, 500);
+            }
+
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', handleSearchInputChange);
+        });
+        let searchTimeout;
+
+
+
+
+
+        function performSearch(page) {
+            const searchInput = document.getElementById('search-input');
+
+            const data = {
+                Search: searchInput.value,
+                Page: page
+            };
+
+            fetch('/Admin/Search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    updateTable(result.productList);
+                    updatePagination(result.pageCount);
+                })
+                .catch(error => {
+                    console.error('AJAX error:', error);
+                });
+        }
+
+
+
+
+        function updateTable(productList) {
+            const tableBody = document.getElementById('product-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+
+            productList.forEach(function (item, index) {
+                const row = document.createElement('tr');
+                row.setAttribute('postId', item.productId);
+
+                row.innerHTML = `
+                                                      <th>${index + 1}</th>
+                                                      <td>${item.productName}</td>
+                                                      <td>${item.deepCategoryName}</td>
+                                                      <td style="width:20%;" class="text-center"><img class="skle" src="/sekiller/${item.productFirstURL}" /></td>
+                                                      <td>${item.productPrice} ₼</td>
+                                                      <td>${item.productDate}</td>
+                                                      <td class="stock">${item.productIsStock ? 'Stokda var' : 'Stokda yoxdur'}</td>
+                                                      <td class="activ">${item.productIsActive ? 'Aktivdir' : 'Passivdir'}</td>
+                                                      <td class="text-center"><a class="text-success" href="/admin/editproduct/${item.productId}"><i class="fas fa-edit text-success"></i></a></td>
+                                                      <td class="text-center"><a class="text-black" data-productid="${item.productId}" onclick="postactive('${item.productId}')"><i class="fa-solid act ${item.productIsActive ? 'fa-a' : 'fa-p'}"></i></a></td>
+                                                      <td class="text-center"><a class="text-primary" data-productid="${item.productId}" onclick="postrecyle('${item.productId}')"><i class="fas fa-recycle ${item.productIsStock ? 'text-success' : 'text-danger'}"></i></a></td>
+                                                    `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updatepagination(pagecount) {
+            $("#first").hide()
+            const ul = $('#pagination ul');
+            ul.empty();
+
+            const currentpage = getcurrentpage();
+
+            for (let i = 0; i < pagecount; i++) {
+                const li = $('<li>').addclass('page-item');
+                const link = $('<a>').addclass('page-link').attr('href', '#').text(i + 1);
+                link.data('page', i);
+
+                if (i === currentpage) {
+                    li.addclass('active');
+                }
+
+                li.append(link);
+                ul.append(li);
+            }
+
+            ul.on('click', '.page-link', function (event) {
+                event.preventdefault();
+
+                ul.find('.page-item.active').removeclass('active');
+                $(this).parent().addclass('active');
+
+                const page = $(this).data('page');
+                performsearch(page);
+            });
+        }
+        //function updatePagination(pageCount) {
+        //    $("#first").hide();
+        //    const ul = $('#pagination ul');
+        //    ul.empty();
+
+        //    const currentPage = getCurrentPage();
+
+        //    for (let i = 0; i < pageCount; i++) {
+        //        const li = $('<li>').addClass('page-item');
+        //        const link = $('<a>').addClass('page-link').attr('href', '#').text(i + 1);
+        //        link.data('page', i);
+
+        //        if (i === currentPage) {
+        //            li.addClass('active');
+        //        }
+
+        //        li.append(link);
+        //        ul.append(li);
+        //    }
+
+        //    ul.off('click', '.page-link');
+
+        //    ul.on('click', '.page-link', function (event) {
+        //        event.preventDefault();
+
+        //        const page = $(this).data('page');
+        //        performSearch(page);
+
+        //        ul.find('.page-item').removeClass('active');
+        //        $(this).parent().addClass('active');
+        //    });
+
+        //    // Sayfa yenilendiğinde aktif sınıfı koru
+        //    const currentActivePage = ul.find('.page-item.active');
+        //    currentActivePage.removeClass('active');
+        //    ul.children().eq(currentPage).addClass('active');
+
+        //    // URL'i güncelle, sayfa yenilendiğinde aktif sayfayı korumak için
+        //    const urlParams = new URLSearchParams(window.location.search);
+        //    urlParams.set('page', currentPage);
+        //    const newUrl = window.location.pathname + '?' + urlParams.toString();
+        //    window.history.replaceState({}, '', newUrl);
+        //}
+
+
+
+
+
+
+
+        function getCurrentPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageParam = urlParams.get('page');
+            const currentPage = parseInt(pageParam, 10);
+            return isNaN(currentPage) ? 0 : currentPage;
+        }
+
+
+
+
+
+
+        function postrecyle(productId) {
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/RecyleProduct',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    var heartIcon = $(`a[data-productid="${productId}"] i.fa-recycle`);
+                    console.log(heartIcon)
+                    if (heartIcon.hasClass('text-success')) {
+                        toastNotif({
+                            text: 'Məhsulunuz artıq stokda deyil!',
+                            color: '#d92402',
+                            timeout: 2000,
+                            icon: 'error'
+                        });
+                        $(`tr[postId="${productId}"] .stock`).text("Stokda yoxdur");
+                        heartIcon.removeClass('text-success');
+                        heartIcon.addClass('text-danger');
+                    } else {
+                        toastNotif({
+                            text: 'Məhsulunuz artıq stokdadır!',
+                            color: '#35ac18',
+                            timeout: 2000,
+                            icon: 'valid'
+                        });
+                        $(`tr[postId="${productId}"] .stock`).text("Stokda var");
+                        heartIcon.removeClass('text-danger');
+                        heartIcon.addClass('text-success');
+                    }
+                },
+                error: function () {
+                    console.log('Xəta baş verdi');
+                }
+            });
+        }
+
+
+        function postactive(productId) {
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/DeleteProduct',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    var heartIcon = $(`a[data-productid="${productId}"] i.act`);
+                    console.log(heartIcon)
+                    if (heartIcon.hasClass('fa-a')) {
+                        toastNotif({
+                            text: 'Məhsulunuzun vəziyyəti aktiv deyil!',
+                            color: '#d92402',
+                            timeout: 2000,
+                            icon: 'error'
+                        });
+                        $(`tr[postId="${productId}"] .activ`).text("Passivdir");
+                        heartIcon.removeClass('fa-a');
+                        heartIcon.addClass('fa-p');
+                    } else {
+                        toastNotif({
+                            text: 'Məhsulunuzun vəziyyəti aktivdir!',
+                            color: '#35ac18',
+                            timeout: 2000,
+                            icon: 'valid'
+                        });
+                        $(`tr[postId="${productId}"] .activ`).text("Aktivdir");
+                        heartIcon.removeClass('fa-p');
+                        heartIcon.addClass('fa-a');
+                    }
+                },
+                error: function () {
+                    console.log('Xəta baş verdi');
+                }
+            });
+        }
+
+
+
+    </script>
+
+}
+

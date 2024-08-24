@@ -1,0 +1,992 @@
+﻿@using System.Globalization;
+@model ProductDetailsViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<main>
+    <section class="breadcrumb__area breadcrumb__style-2 include-bg pt-50 pb-20">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="breadcrumb__content p-relative z-index-1">
+                        <div class="breadcrumb__list has-icon">
+                            <span class="breadcrumb-icon">
+                                <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.42393 16H15.5759C15.6884 16 15.7962 15.9584 15.8758 15.8844C15.9553 15.8104 16 15.71 16 15.6054V6.29143C16 6.22989 15.9846 6.1692 15.9549 6.11422C15.9252 6.05923 15.8821 6.01147 15.829 5.97475L8.75305 1.07803C8.67992 1.02736 8.59118 1 8.5 1C8.40882 1 8.32008 1.02736 8.24695 1.07803L1.17098 5.97587C1.11791 6.01259 1.0748 6.06035 1.04511 6.11534C1.01543 6.17033 0.999976 6.23101 1 6.29255V15.6063C1.00027 15.7108 1.04504 15.8109 1.12451 15.8847C1.20398 15.9585 1.31165 16 1.42393 16ZM10.1464 15.2107H6.85241V10.6202H10.1464V15.2107ZM1.84866 6.48977L8.4999 1.88561L15.1517 6.48977V15.2107H10.9946V10.2256C10.9946 10.1209 10.95 10.0206 10.8704 9.94654C10.7909 9.87254 10.683 9.83096 10.5705 9.83096H6.42848C6.316 9.83096 6.20812 9.87254 6.12858 9.94654C6.04904 10.0206 6.00435 10.1209 6.00435 10.2256V15.2107H1.84806L1.84866 6.48977Z" fill="#55585B" stroke="#55585B" stroke-width="0.5" />
+                                </svg>
+                            </span>
+                            <span><a href="/">@localizer["Əsas səhifə"]</a></span>
+                            <span><a href="~/main/shopforsubcategory/@Model.Product.ProductDeepCategory.DeepCategorySubCategoryId">@Model.Product.ProductDeepCategory.DeepCategorySubCategory.SubCategoryName</a></span>
+                            <span><a href="~/main/shopfordeepcategory/@Model.Product.ProductDeepCategory.DeepCategoryId">@Model.Product.ProductDeepCategory.DeepCategoryName</a></span>
+                            <span>@Model.Product.ProductName</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tp-product-details-area">
+        <div class="tp-product-details-top pb-115">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6">
+                        <div class="tp-product-details-thumb-wrapper tp-tab d-sm-flex">
+                            <nav>
+                                @{
+                                    var a = 2;
+                                    var b = 2;
+                                }
+                                <div class="nav nav-tabs flex-sm-column " id="productDetailsNavThumb" role="tablist">
+                                    <button class="nav-link active" id="nav-1-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="true">
+                                        <img id="zoom-image" src="~/sekiller/@Model.Product.ProductFirstPhotoUrl" alt="@Model.Product.ProductDeepCategory.DeepCategoryName" />
+                                    </button>
+                                    @foreach (var item in Model.Image)
+                                    {
+                                        <button class="nav-link" id="nav-@a-tab" data-bs-toggle="tab" data-bs-target="#nav-@a" type="button" role="tab" aria-controls="nav-@a" aria-selected="false">
+                                            <img src="~/sekiller/@item.ImageUrl" />
+                                        </button>
+                                        a++;
+                                    }
+                                </div>
+                            </nav>
+                            <div class="tab-content tabecon m-img" id="productDetailsNavContent">
+                                <div class="tab-pane fade show active" id="nav-1" role="tabpanel" aria-labelledby="nav-1-tab" tabindex="0">
+                                    <div class="tp-product-details-nav-main-thumb">
+                                        <img id="zoom-image" src="~/sekiller/@Model.Product.ProductFirstPhotoUrl" alt="@Model.Product.ProductDeepCategory.DeepCategoryName" onclick="openModal(this)" />
+                                    </div>
+
+                                    <!-- Modal Div -->
+                                    <div id="myModal" class="modal">
+                                        <span class="close">&times;</span>
+                                        <div class="modal-content">
+                                            <img id="modal-image">
+                                        </div>
+                                    </div>
+
+
+                                    
+                                </div>
+                                @foreach (var item in Model.Image)
+                                {
+                                    <div class="tab-pane fade" id="nav-@b" role="tabpanel" aria-labelledby="nav-@b-tab" tabindex="0">
+                                        <div class="tp-product-details-nav-main-thumb">
+                                            <img src="~/sekiller/@item.ImageUrl" alt="@Model.Product.ProductDeepCategory.DeepCategoryName" />
+                                        </div>
+                                    </div>
+                                    b++;
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6">
+                        <div class="tp-product-details-wrapper">
+                            <div class="tp-product-details-category">
+                                <span>@Model.Product.ProductDeepCategory.DeepCategoryName</span>
+                            </div>
+                            <h3 class="tp-product-details-title">@Model.Product.ProductName</h3>
+                            <div class="tp-product-details-inventory d-flex align-items-center mb-10">
+                                <div class="tp-product-details-stock mb-10">
+                                    <span>@(Model.Product.ProductIsSctock == true ? localizer["Stokda var"] : localizer["Stokda yoxdur"])</span>
+                                </div>
+                                <div class="tp-product-details-rating-wrapper d-flex align-items-center mb-10">
+                                    <div class="tp-product-details-reviews">
+                                        <span>(@Model.CommentCount @localizer["şərh"])</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>@Model.Product.ProductDescription</p>
+
+
+                            <div class="tp-product-details-price-wrapper mb-20">
+                                @{
+                                    var mainprice = Model.Product.ProductWithoutPrice;
+                                    var secondPrice = Model.Product.ProductPrice;
+
+                                }
+
+                                @if (Model.Product.ProductWithoutPrice is not null)
+                                {
+                                    <span class="tp-product-details-price new-price">@string.Format("{0:0.00}", mainprice) ₼</span> <div class="second-price"><del>@string.Format("{0:C2}", secondPrice, CultureInfo.InvariantCulture) ₼</del></div>
+                                }
+                                else
+                                {
+                                    <span class="tp-product-details-price new-price">@string.Format("{0:0.00}", Model.Product.ProductPrice, CultureInfo.InvariantCulture) ₼</span>
+                                }
+                            </div>
+
+
+
+                            <div class="tp-product-details-variation">
+                                <div class="tp-product-details-variation-item">
+                                    <h4 class="tp-product-details-variation-title">@localizer["Rənglər"] :</h4>
+                                    <div class="tp-product-details-variation-list">
+                                        @foreach (var item in Model.Colors)
+                                        {
+                                            <button type="button" class="color tp-color-variation-btn active">
+                                                <span data-bg-color="#@item.Color.ColorHash"></span>
+                                                <span class="tp-color-variation-tootltip">@item.Color.ColorTitle</span>
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tp-product-details-action-wrapper">
+                                <h3 class="tp-product-details-action-title">@localizer["Aylıq ödəniş"]</h3>
+                                <div class="tp-product-details-action-item-wrapper d-flex align-items-center">
+                                    <div class="tp-product-details-quantity">
+                                        <div class="tp-product-quantity mb-15 mr-15">
+                                            <span class="tp-cart-minus">
+                                                <svg width="11" height="2" viewBox="0 0 11 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 1H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                            <input class="tp-cart-input" type="text" name="quantity" value="@(Model.Quantity == 0 ? 1 : Model.Quantity )">
+                                            <span class="tp-cart-plus">
+                                                <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M5.5 10.5V1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="tp-product-details-add-to-cart mb-15 w-100">
+                                        <button onclick="postbasket('@Model.Product.ProductId')" prctbasketid="@Model.Product.ProductId" class="tp-product-details-add-to-cart-btn w-100 sebbasket @(Model.IsBasket == true ? "inbasket bg-success text-white" : "outbasket")">@(Model.IsBasket == true ? localizer["Səbətə əlavə olunub"] : localizer["Səbətə əlavə et"]) </button>
+                                    </div>
+                                </div>
+                                <button class="tp-product-details-buy-now-btn w-100" onclick="posttekal('@Model.Product.ProductId')" indialProductId="@Model.Product.ProductId">@localizer["İndi al"]</button>
+                            </div>
+                            <div class="tp-product-details-action-sm">
+                                <button type="button" class="tp-product-details-action-sm-btn" data-productid="@Model.Product.ProductId" onclick="postfavorite('@Model.Product.ProductId')">
+                                    <i class="fas fa-heart @(Model.IsFavorite==true ? "text-danger" : "text-black")"></i>
+                                    @localizer["İstək siyahısına əlavə edin"]
+                                </button>
+                                <a href="" id="share-btn"><i class="fa-solid fa-share"></i> Paylaş</a>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10 border border-danger rounded">
+                                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+
+                                        <div class="carousel-inner detailCarousel">
+                                            <div class="carousel-item active innerkarusel">
+                                                <img src="https://irshad.az/images/svg-icons/tam-card.svg" class="d-block" alt="..." style="object-fit:cover;">
+                                                <div class="carousel-caption d-none d-md-block" style="padding-top:20px !important;">
+                                                    @{
+                                                        var price = Model.Product.ProductPrice / 18;
+                                                        var format = string.Format("{0:N2}", price);
+                                                    }
+                                                    <h5><span>@format ₼</span> x 18 ay</h5>
+                                                    <p>Tamkart kartı ilə 18 aya faizsiz ödə!</p>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img src="https://irshad.az/images/bircard.png" class="d-block" alt="..." style="object-fit:cover;">
+                                                <div class="carousel-caption d-none d-md-block">
+                                                    <h5><span>@format ₼</span> x 18 ay</h5>
+                                                    <p>Birkart kartı ilə 18 aya faizsiz ödə!</p>
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <img src="https://irshad.az/images/albalicard.png" class="d-block" alt="..." style="object-fit:cover;">
+                                                <div class="carousel-caption d-none d-md-block">
+                                                    <h5><span>@format ₼</span> x 18 ay</h5>
+                                                    <p>Albalıkart kartı ilə 18 aya faizsiz ödə!</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="tp-product-details-query">
+                                        <div class="loancalculator">
+                                            <form action="">
+                                                <h5>@localizer["İlkin ödənişsiz hissə - hissə ödə!"]</h5>
+                                                <div class="calcinput">
+                                                    @*                                            <label for="qiymetidaxilet">Məhsulun qiymətini daxil edin</label>
+                                                    *@                                            <input type="hidden" id="qiymetidaxilet" value="@Model.Product.ProductPrice">
+                                                </div>
+                                                <table>
+                                                    <tr>
+                                                        <th>@localizer["Müddət"]</th>
+                                                        <th>@localizer["Aylıq ödəniş"]</th>
+                                                        <th>@localizer["Yekun məbləğ"]</th>
+                                                    </tr>
+                                                    <tr id="3ay">
+                                                        <td class="firsttd">3 @localizer["ay"]</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="6ay">
+                                                        <td class="firsttd">6 @localizer["ay"]</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="9ay">
+                                                        <td class="firsttd">9 @localizer["ay"]</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="12ay">
+                                                        <td class="firsttd">12 @localizer["ay"]</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="15ay">
+                                                        <td class="firsttd">15 @localizer["ay"]</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <tr id="18ay">
+                                                        <td class="firsttd">18 @localizer["ay"]</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                                <button class="btn btn-primary" @localizer["Hissə-hissə al"]</button>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tp-product-details-bottom pb-140">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="tp-product-details-tab-nav tp-tab">
+                            <nav>
+                                <div class="nav nav-tabs justify-content-center p-relative tp-product-tab" id="navPresentationTab" role="tablist">
+                                    <button class="nav-link active" id="nav-addInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-addInfo" type="button" role="tab" aria-controls="nav-addInfo" aria-selected="false">@localizer["Texniki xüsusiyyətləri"]</button>
+                                    <button class="nav-link" id="nav-review-tab" data-bs-toggle="tab" data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review" aria-selected="false">@localizer["Rəylər"] (@Model.CommentCount)</button>
+                                    <span id="productTabMarker" class="tp-product-details-tab-line"></span>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="navPresentationTabContent">
+                                <div class="tab-pane fade show active" id="nav-addInfo" role="tabpanel" aria-labelledby="nav-addInfo-tab" tabindex="0">
+
+                                    <div class="tp-product-details-additional-info ">
+                                        <div class="row justify-content-center">
+                                            <div class="col-xl-10">
+                                                <table>
+                                                    <tbody>
+                                                        @foreach (var item in Model.TechCharacteristicsContent)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.TechCharacteristicsContentTechCharacteristics.TechCharacteristicName</td>
+                                                                <td>@item.TechCharacteristicsContentTitle</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab" tabindex="0">
+                                    <div class="tp-product-details-review-wrapper pt-60">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="tp-product-details-review-statics">
+                                                    <div class="tp-product-details-review-list pr-110">
+                                                        <h3 class="tp-product-details-review-title">@localizer["Rəylər"]</h3>
+                                                        @if (Model.Comment.Count == 0)
+                                                        {
+                                                            <h4>@localizer["Bu məhsula heç bir şərh yazılmamışdır..."]</h4>
+                                                        }
+                                                        else
+                                                        {
+                                                            @foreach (Comment item in Model.Comment)
+                                                            {
+                                                                <div class="tp-product-details-review-avater d-flex align-items-start">
+                                                                    <div class="tp-product-details-review-avater-thumb">
+                                                                        <a href="#">
+                                                                            <img src="~/sekiller/@item.CommentUser.UserPhoto" alt="@Model.Product.ProductDeepCategory.DeepCategorySubCategory.SubCategoryName">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="tp-product-details-review-avater-content">
+                                                                        <h3 class="tp-product-details-review-avater-title">@item.CommentUser.UserName @item.CommentUser.UserSurname</h3>
+                                                                        <span class="tp-product-details-review-avater-meta">@(((DateTime)item.CommentDate).ToString("dd-MMM-yyyy")) </span>
+
+                                                                        <div class="tp-product-details-review-avater-comment">
+                                                                            <p>@item.CommentContent</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <div class="col-lg-6">
+                                                    <div class="tp-product-details-review-form">
+                                                        <h3 class="tp-product-details-review-form-title">
+                                                            @localizer["Rəy əlavə et"]
+                                                        </h3>
+                                                        <form action="~/main/postcomment" method="post">
+                                                            <div class="tp-product-details-review-input-wrapper">
+                                                                <div class="tp-product-details-review-input-box">
+                                                                    <div class="tp-product-details-review-input mt-4">
+                                                                        <textarea id="msg" name="CommentContent" required placeholder="@localizer["Detallı rəy"]"></textarea>
+                                                                        <input type="hidden" value="@Model.Product.ProductId" name="productId">
+                                                                    </div>
+                                                                    <div class="tp-product-details-review-input-title">
+                                                                        <label for="msg">@localizer["Detallı rəy"]</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tp-product-details-review-btn-wrapper">
+                                                                <button class="tp-product-details-review-btn">@localizer["Göndər"]</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="slide-container swiper">
+            <h1 class="sim">@localizer["Oxşar məhsullar"]</h1>
+            <div class="slide-content">
+                <div class="card-wrapper swiper-wrapper">
+
+                    @foreach (ProductWithCommentCount item1 in ViewBag.Similar)
+                    {
+                        <div class="card swiper-slide">
+                            <div class="product-grid">
+                                <div class="product-image">
+                                    <a href="~/main/productdetails/@item1.Product.ProductId" class="image">
+                                        <img class="pic-1" src="~/sekiller/@item1.Product.ProductFirstPhotoUrl" alt="@Model.Product.ProductDeepCategory.DeepCategorySubCategory.SubCategoryName">
+                                    </a>
+                                    <span class="@(item1.Product.ProductIsSctock==true ? "product-sale" : "product-hot")">@(item1.Product.ProductIsSctock == true ? localizer["Stokda var"] : localizer["Stokda yoxdur"])</span>
+                                    <ul class="product-links">
+                                        <li data-productid="@item1.Product.ProductId" onclick="postfavoritesimilar('@item1.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["İstək siyahısına əlavə edin"]"><i class="fas fa-heart @(item1.IsFavorite==true ? "text-danger" : "text-black")"></i></a></li>
+                                        <li data-productid="@item1.Product.ProductId" onclick="postbasketsimilar('@item1.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["Səbət"]"><i class="fa-solid fa-basket-shopping @(item1.IsBasket==true ? "text-primary" : "text-black")"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product-content">
+                                    <h3 class="title"><a href="#">@(item1.Product.ProductName.Length < 20 ? item1.Product.ProductName.Substring(0, item1.Product.ProductName.Length) : item1.Product.ProductName.Substring(0, 20))</a></h3>
+                                    <div class="price">@item1.Product.ProductPrice ₼</div>
+                                    @{
+                                        var secondprice = item1.Product.ProductWithoutPrice;
+                                    }
+                                    @if (item1.Product.ProductWithoutPrice is not null)
+                                    {
+                                        <div class="second-price"><del>@string.Format("{0:N2}", secondPrice) ₼</del></div>
+                                    }
+                                    <a class="add-to-cart" href="~/main/productdetails/@item1.Product.ProductId">@localizer["Ətraflı bax"]</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+@section style{
+
+    <style>
+        .sim {
+            margin-left: 50px;
+            margin-bottom: 40px;
+        }
+
+        @@media(max-width:768px) {
+            .sim {
+                margin-left: 0px;
+            }
+
+            .sebbasket {
+                font-size: 13px;
+            }
+        }
+
+        .slide-container {
+            max-width: 1510px;
+            margin: auto;
+            width: 100%;
+            padding: 40px 0;
+        }
+
+        .slide-content {
+            margin: 0 40px;
+            overflow: hidden;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .card {
+            border-radius: 25px;
+            background-color: #FFF;
+        }
+
+        .image-content,
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 14px;
+        }
+
+        .image-content {
+            position: relative;
+            row-gap: 5px;
+            padding: 25px 0;
+        }
+
+        .overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #4070F4;
+            border-radius: 25px 25px 0 25px;
+        }
+
+            .overlay::before,
+            .overlay::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: -40px;
+                height: 40px;
+                width: 40px;
+                background-color: #4070F4;
+            }
+
+            .overlay::after {
+                border-radius: 0 25px 0 0;
+                background-color: #FFF;
+            }
+
+        .card-image {
+            position: relative;
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            background: #FFF;
+            padding: 3px;
+        }
+
+            .card-image .card-img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 4px solid #4070F4;
+            }
+
+        .name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #707070;
+            text-align: center;
+        }
+
+        .button {
+            border: none;
+            font-size: 16px;
+            color: #FFF;
+            padding: 8px 16px;
+            background-color: #4070F4;
+            border-radius: 6px;
+            margin: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .button:hover {
+                background: #265DF2;
+            }
+
+        .swiper-navBtn {
+            color: #6E93f7;
+            transition: color 0.3s ease;
+        }
+
+            .swiper-navBtn:hover {
+                color: #4070F4;
+            }
+
+            .swiper-navBtn::before,
+            .swiper-navBtn::after {
+                font-size: 35px;
+            }
+
+        .swiper-button-next {
+            right: 0;
+        }
+
+        .swiper-button-prev {
+            left: 0;
+        }
+
+        .swiper-pagination-bullet {
+            background-color: #6E93f7;
+            opacity: 1;
+        }
+
+        .swiper-pagination-bullet-active {
+            background-color: #4070F4;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .slide-content {
+                margin: 0 10px;
+            }
+
+            .swiper-navBtn {
+                display: none;
+            }
+        }
+
+        .tp-product-thumb a img {
+            height: 300px;
+            object-fit: contain;
+        }
+
+
+
+
+        /* zoom */
+
+        .modal {
+            display: none; /* Başlangıçta gizli */
+            /* position: fixed; */
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            padding-top:120px;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.2); /* Yarı şeffaf siyah arka plan */
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            width: 450px;
+            height: 550px;
+            padding: 20px;
+            border: 1px solid #888;
+            background-color: white;
+            
+        }
+
+            .modal-content img {
+                width: 100%;
+                height: 100%;
+            }
+
+        .close {
+            position: absolute;
+            top: 120px;
+            left:70%;
+            color: red;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+
+        }
+
+        .close img{
+            object-fit:cover;
+        }
+
+
+
+    </style>
+}
+@section scripts{
+
+    <script>
+
+        var swiper = new Swiper(".slide-content", {
+            slidesPerView: 3,
+            spaceBetween: 25,
+            loop: true,
+            centerSlide: 'true',
+            fade: 'true',
+            grabCursor: 'true',
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+                dynamicBullets: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                },
+                520: {
+                    slidesPerView: 2,
+                },
+                950: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+
+        var bskt = document.querySelector('.bskt');
+        var fvrt = document.querySelector('.fvrt');
+        var inputElement = document.getElementsByClassName('tp-cart-input');
+        $(document).ready(function () {
+            $('.tp-cart-plus').click(function () {
+                var quantityInput = $(this).closest('.tp-product-quantity').find('.tp-cart-input');
+                var currentQuantity = parseInt(quantityInput.val());
+                quantityInput.val(currentQuantity);
+                var basketProductId = $(this).closest('tr').find('.tp-cart-img a').attr('href').split('/').pop();
+
+
+                $.ajax({
+                    url: '/Main/QuantityChange',
+                    method: 'POST',
+                    data: {
+                        currentQuantity: currentQuantity,
+                        basketProductId: basketProductId
+                    },
+                    success: function (response) {
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+
+                var minusButton = $(this).closest('.tp-product-quantity').find('.tp-cart-minus .mini');
+                if (currentQuantity > 1) {
+                    minusButton.prop('disabled', false);
+                } else {
+                    minusButton.prop('disabled', true);
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('.tp-cart-minus').click(function () {
+                var productPrice = parseFloat($(this).closest('tr').find('.tp-cart-price').text().replace(/[^\d.-]/g, ''));
+                var totalPrice = parseFloat($('.tp-cart-checkout-total .prc').text().replace(/[^\d.-]/g, ''));
+                if (isNaN(productPrice) || isNaN(totalPrice)) {
+                    $('.tp-cart-checkout-total .prc').text('Hata');
+                    return;
+                }
+                var newTotalPrice = totalPrice - productPrice;
+                if (newTotalPrice < 0) {
+                    newTotalPrice = 0;
+                }
+                $('.tp-cart-checkout-total .prc').text(newTotalPrice.toFixed(2));
+
+                var quantityInput = $(this).closest('.tp-product-quantity').find('.tp-cart-input');
+                var currentQuantity = parseInt(quantityInput.val());
+                quantityInput.val(currentQuantity);
+                var basketProductId = $(this).closest('tr').find('.tp-cart-img a').attr('href').split('/').pop();
+
+                $.ajax({
+                    url: '/Main/QuantityChange',
+                    method: 'POST',
+                    data: {
+                        currentQuantity: currentQuantity,
+                        basketProductId: basketProductId
+                    },
+                    success: function (response) {
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+                //var quantityInput = $(this).closest('.tp-product-quantity').find('.tp-cart-input');
+                //var currentQuantity = parseInt(quantityInput.val());
+                //quantityInput.val(currentQuantity);
+                //console.log(currentQuantity)
+
+                var plusButton = $(this).closest('.tp-product-quantity').find('.tp-cart-minus .mini');
+                console.log(plusButton)
+                if (currentQuantity === 1) {
+                    plusButton.prop('disabled', true);
+                }
+                else {
+                    plusButton.prop('disabled', false);
+                }
+            });
+        });
+
+
+
+
+        function postfavorite(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostFavorite',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    var heartIcon = $(`button[data-productid="${productId}"] i.fa-heart`);
+                    if (heartIcon.hasClass('text-danger')) {
+                        fvrt.textContent = parseInt(fvrt.textContent) - 1;
+                        heartIcon.removeClass('text-danger');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        fvrt.textContent = parseInt(fvrt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-danger');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+        function posttekal(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            var heartIcon = $(`button[prctbasketid="${productId}"]`);
+            if (heartIcon.hasClass('inbasket')) {
+                window.location.href = '/main/basket';
+            } else {
+                var quantityInput = document.querySelector('input[name="quantity"]');
+
+                var quantityValue = quantityInput.value;
+
+                var formdata = new FormData();
+                formdata.append('productId', productId);
+                formdata.append('inputElement', quantityValue);
+
+                console.log(quantityValue)
+                $.ajax({
+                    type: 'POST',
+                    url: '/Main/PostBasket',
+                    data: formdata,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: (res) => {
+                        window.location.href = '/main/basket';
+                    },
+                    error: function () {
+                        console.log('@localizer["Xəta baş verdi"]');
+                    }
+                });
+
+            }
+        }
+
+        function postbasket(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            var heartIcon = $(`button[prctbasketid="${productId}"]`);
+            if (heartIcon.hasClass('inbasket')) {
+                window.location.href = '/main/basket';
+            } else {
+                bskt.textContent = parseInt(bskt.textContent) + 1;
+                heartIcon.removeClass('outbasket');
+                heartIcon.addClass('inbasket');
+                heartIcon.addClass('bg-success');
+                heartIcon.addClass('text-white');
+                heartIcon.text('Səbətə əlavə olunub');
+                var quantityInput = document.querySelector('input[name="quantity"]');
+
+                var quantityValue = quantityInput.value;
+
+                var formdata = new FormData();
+                formdata.append('productId', productId);
+                formdata.append('inputElement', quantityValue);
+
+                console.log(quantityValue)
+                $.ajax({
+                    type: 'POST',
+                    url: '/Main/PostBasket',
+                    data: formdata,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: (res) => {
+                    },
+                    error: function () {
+                        console.log('@localizer["Xəta baş verdi"]');
+                    }
+                });
+            }
+
+        }
+
+        function postfavoritesimilar(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostFavorite',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    var heartIcon = $(`li[data-productid="${productId}"] i.fa-heart`);
+                    if (heartIcon.hasClass('text-danger')) {
+                        fvrt.textContent = parseInt(fvrt.textContent) - 1;
+                        heartIcon.removeClass('text-danger');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        fvrt.textContent = parseInt(fvrt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-danger');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+        function postbasketsimilar(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostBasket',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    var heartIcon = $(`li[data-productid="${productId}"] i.fa-basket-shopping`);
+                    if (heartIcon.hasClass('text-primary')) {
+                        toastNotif({
+                            text: '@localizer["Məhsulunuz səbətdən uğurla silindi!"]',
+                            color: '#d92402',
+                            timeout: 2000,
+                            icon: 'error'
+                        });
+                        bskt.textContent = parseInt(bskt.textContent) - 1;
+                        heartIcon.removeClass('text-primary');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        toastNotif({
+                            text: '@localizer["Məhsulunuz səbətə uğurla əlavə edildi!"]',
+                            color: '#35ac18',
+                            timeout: 2000,
+                            icon: 'valid'
+                        });
+                        bskt.textContent = parseInt(bskt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-primary');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+
+
+
+
+
+        // zoom
+
+        function openModal(img) {
+            // Modalı aç
+            var modal = document.getElementById('myModal');
+            var modalImg = document.getElementById('modal-image');
+            modal.style.display = "block";
+            modalImg.src = img.src; // Tıklanan resmin src'sini modal resmine kopyala
+        }
+
+        // X düğmesi ile modalı kapat
+        var closeModal = document.querySelector('.close');
+        closeModal.onclick = function () {
+            var modal = document.getElementById('myModal');
+            modal.style.display = "none";
+        }
+
+
+
+        // share
+        document.getElementById('share-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            var pageUrl = encodeURIComponent(window.location.href);
+            var whatsappUrl = `https://api.whatsapp.com/send?text=${pageUrl}`;
+            window.open(whatsappUrl, '_blank');
+        });
+    </script>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+            function isUserAuthenticated() {
+                return true;
+            }
+        </script>
+    }
+    else
+    {
+        <script>
+            function isUserAuthenticated() {
+                return false;
+            }
+        </script>
+    }
+}

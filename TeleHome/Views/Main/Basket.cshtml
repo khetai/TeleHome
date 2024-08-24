@@ -1,0 +1,410 @@
+﻿@using Newtonsoft.Json;
+@using static TeleHome.Controllers.MainController;
+@using Microsoft.AspNetCore.Http;
+
+@model List<Basket>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<main>
+
+    <section class="breadcrumb__area include-bg pt-95 pb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="breadcrumb__content p-relative z-index-1">
+                        <h3 class="breadcrumb__title">@localizer["Səbət"]</h3>
+                        <div class="breadcrumb__list">
+                            <span><a href="/">@localizer["Əsas səhifə"]</a></span>
+                            <span>@localizer["Səbət"]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tp-cart-area pb-120">
+        <div class="container">
+            <form method="post" action="/Main/CreatePayment">
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="tp-cart-list mb-25 mr-30">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="tp-cart-header-product">@localizer["Məhsulun adı"]</th>
+                                        <th class="tp-cart-header-price">@localizer["Qiymət"]</th>
+                                        <th class="tp-cart-header-quantity">@localizer["Say"]</th>
+                                        <th></th>
+                                        <th><input type="checkbox" name="name" value="" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <input type="hidden" name="id" value="@item.BasketProductId" />
+                                                <td class="tp-cart-img"><a href="~/main/productdetails/@item.BasketProductId"> <img src="~/sekiller/@item.BasketProduct.ProductFirstPhotoUrl" alt=""></a></td>
+                                                <td class="tp-cart-title"><a href="~/main/productdetails/@item.BasketProductId">@item.BasketProduct.ProductName</a></td>
+                                                <td class="tp-cart-price">
+                                                    @{
+                                                        var secondPrice = item.BasketProduct.ProductPrice;
+                                                        var mainprice = item.BasketProduct.ProductWithoutPrice;
+                                                    }
+                                                    @if (item.BasketProduct.ProductWithoutPrice is not null)
+                                                    {
+                                                        <span class="tp-product-details-price new-price das">@mainprice ₼</span>
+                                                        <div class="second-price"><del>@secondPrice ₼</del></div>
+                                                    }
+                                                    else
+
+                                                    {
+                                                        <span class="">
+                                                            <span class="das">@item.BasketProduct.ProductPrice</span>
+                                                        </span>
+                                                        <span>₼</span>
+                                                    }
+
+                                                </td>
+                                                <td class="tp-cart-quantity">
+                                                    <div class="tp-product-quantity mt-10 mb-10">
+                                                        <span class="tp-cart-minus">
+                                                            <input type="button" @(item.BasketQuantity <= 1 ? "disabled" : "") class="mini" value="-">
+                                                        </span>
+                                                        <input class="tp-cart-input" type="text" readonly value="@item.BasketQuantity">
+                                                        <span class="tp-cart-plus">
+                                                            <input type="button" class="plu" value="+">
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td class="tp-cart-action">
+                                                    <button type="button" class="tp-cart-action-btn">
+                                                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.53033 1.53033C9.82322 1.23744 9.82322 0.762563 9.53033 0.46967C9.23744 0.176777 8.76256 0.176777 8.46967 0.46967L5 3.93934L1.53033 0.46967C1.23744 0.176777 0.762563 0.176777 0.46967 0.46967C0.176777 0.762563 0.176777 1.23744 0.46967 1.53033L3.93934 5L0.46967 8.46967C0.176777 8.76256 0.176777 9.23744 0.46967 9.53033C0.762563 9.82322 1.23744 9.82322 1.53033 9.53033L5 6.06066L8.46967 9.53033C8.76256 9.82322 9.23744 9.82322 9.53033 9.53033C9.82322 9.23744 9.82322 8.76256 9.53033 8.46967L6.06066 5L9.53033 1.53033Z" fill="currentColor" />
+                                                        </svg>
+                                                        <span>@localizer["Sil"]</span>
+                                                    </button>
+                                                </td>
+                                                <td><input type="checkbox" name="OrderCheked" class="ch-taggle-basket" value="" checked="@item.BasketSelected" /></td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @foreach (var item in ViewBag.Products)
+                                        {
+                                            <tr>
+                                                <input type="hidden" name="id" value="@item.ProductId" />
+                                                <td class="tp-cart-img"><a href="~/main/productdetails/@item.ProductId"> <img src="~/sekiller/@item.ProductFirstPhotoUrl" alt=""></a></td>
+                                                <td class="tp-cart-title"><a href="~/main/productdetails/@item.ProductId">@item.ProductName</a></td>
+                                                <td class="tp-cart-price">
+                                                    @{
+                                                        var secondPrice = item.ProductPrice;
+                                                        var mainprice = item.ProductWithoutPrice;
+                                                    }
+                                                    @if (item.ProductWithoutPrice is not null)
+                                                    {
+                                                        <span class="tp-product-details-price new-price das">@mainprice ₼</span>
+                                                        <div class="second-price"><del>@secondPrice ₼</del></div>
+                                                    }
+                                                    else
+
+                                                    {
+                                                        <span class="">
+                                                            <span class="das">@item.ProductPrice</span>
+                                                        </span>
+                                                        <span>₼</span>
+                                                    }
+
+                                                </td>
+                                                <td class="tp-cart-quantity">
+                                                    <div class="tp-product-quantity mt-10 mb-10">
+                                                        <span class="tp-cart-minus">
+                                                            <input @(ViewBag.ProductQuantities[item.ProductId] <= 1 ? "disabled" : "") type="button" class="mini" value="-">
+                                                        </span>
+                                                        <input class="tp-cart-input" type="text" readonly value="@ViewBag.ProductQuantities[item.ProductId]">
+                                                        <span class="tp-cart-plus">
+                                                            <input type="button" class="plu" value="+">
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td class="tp-cart-action">
+                                                    <button type="button" class="tp-cart-action-btn">
+                                                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.53033 1.53033C9.82322 1.23744 9.82322 0.762563 9.53033 0.46967C9.23744 0.176777 8.76256 0.176777 8.46967 0.46967L5 3.93934L1.53033 0.46967C1.23744 0.176777 0.762563 0.176777 0.46967 0.46967C0.176777 0.762563 0.176777 1.23744 0.46967 1.53033L3.93934 5L0.46967 8.46967C0.176777 8.76256 0.176777 9.23744 0.46967 9.53033C0.762563 9.82322 1.23744 9.82322 1.53033 9.53033L5 6.06066L8.46967 9.53033C8.76256 9.82322 9.23744 9.82322 9.53033 9.53033C9.82322 9.23744 9.82322 8.76256 9.53033 8.46967L6.06066 5L9.53033 1.53033Z" fill="currentColor" />
+                                                        </svg>
+                                                        <span>@localizer["Sil"]</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="tp-cart-checkout-wrapper">
+                            <div class="tp-cart-checkout-top d-flex align-items-center justify-content-between">
+                                <span class="tp-cart-checkout-top-title">@localizer["Sizin məhsullarınız"]:</span>
+                            </div>
+                            @*  @if (User.Identity.IsAuthenticated)
+                            {
+                            @foreach (var item in Model)
+                            {
+                            <div class="tp-cart-checkout-total d-flex align-items-center justify-content-between">
+                            <span>@item.BasketProduct.ProductName -  @item.BasketQuantity</span>
+                            <span class="">
+                            @if (item.BasketProduct.ProductWithoutPrice is not null)
+                            {
+                            <span class="prc">
+                            <span class="tp-product-details-price new-price das">@item.BasketProduct.ProductWithoutPrice</span>
+                            <div class="second-price"><del>@item.BasketProduct.ProductPrice  </del></div>
+                            </span>
+
+
+                            }
+                            else
+
+                            {
+                            <span class="prc">
+                            <span class="das">@item.BasketProduct.ProductPrice ₼</span>
+                            </span>
+                            }
+
+                            </span>
+
+                            </div>
+                            }
+                            } *@
+                            <div class="tp-cart-checkout-total d-flex align-items-center justify-content-between">
+                                <span class="orderSpanOne">@localizer["Məhsulların qiyməti"]:</span>
+                                <span class="">
+                                    <span class="prc">@string.Format("{0:N2}", ViewBag.TotalPrice).Replace(".", "") &nbsp; ₼</span>
+                                </span>
+                            </div>
+                            <div class="tp-cart-checkout-proceed">
+                                <button class="tp-cart-checkout-btn w-100">@localizer["Təsdiqlə"]</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+</main>
+@section style {
+    <style>
+        .mini {
+            background:white;
+            padding: 1px 11px;
+            /* border-bottom-left-radius: 20px;
+            border-top-left-radius: 20px; */
+            /* border: 1px solid #d92402; */
+            border:none;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+
+        .plu {
+            background: white;
+            padding: 2px 10px;
+           /*  border-bottom-right-radius: 20px;
+            border-top-right-radius: 20px; */
+            /* background: green; */
+            /* border: 1px solid green; */
+            border:none;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+    </style>
+}
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.ch-taggle-basket').click(function () {
+                var basketProductId = $(this).closest('tr').find('.tp-cart-img a').attr('href').split('/').pop();
+                var productPrice = parseFloat($(this).closest('tr').find('.tp-cart-price .das').text().replace(/[^\d.-]/g, '.'));
+                var totalPrice = parseFloat($('.tp-cart-checkout-total .prc').text().replace(/[^\d.-]/g, '.'));
+                var quantityInput = $(this).closest('td').siblings('.tp-cart-quantity').find('.tp-cart-input');
+
+                var currentQuantity = parseInt(quantityInput.val());
+                quantityInput.val(currentQuantity);
+                console.log(currentQuantity)
+                if (isNaN(productPrice) || isNaN(totalPrice)) {
+                    $('.tp-cart-checkout-total .prc').text('Hata');
+                    return;
+                }
+
+                let inp = $(this)[0].checked
+                console.log($(this)[0].checked)
+                $.ajax({
+                    url: '/Main/SelectBasket',
+                    method: 'POST',
+                    data: {
+                        id: basketProductId
+                    },
+                    success: function (response) {
+                        if (inp) {
+                            $('.tp-cart-checkout-total .prc').text(
+                                (totalPrice + (productPrice * currentQuantity)).toFixed(2)
+                            );
+                        } else {
+                            $('.tp-cart-checkout-total .prc').text(
+                                (totalPrice - (productPrice * currentQuantity)).toFixed(2)
+                            );
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            })
+        })
+        $(document).ready(function () {
+            $('.tp-cart-action-btn').click(function () {
+                var totalPrice = parseFloat($('.tp-cart-checkout-total .prc').text().replace(/[^\d.-]/g, '.'));
+                var productPrice = parseFloat($(this).closest('tr').find('.tp-cart-price .das').text().replace(/[^\d.-]/g, '.'));
+                var quantityInput = $(this).closest('td').siblings('.tp-cart-quantity').find('.tp-cart-input');
+                var currentQuantity = parseInt(quantityInput.val());
+                quantityInput.val(currentQuantity);
+                console.log(currentQuantity)
+
+
+                let inp = ($(this).parents("td").next().children()[0]).checked
+
+                var basketProductId = $(this).closest('tr').find('.tp-cart-img a').attr('href').split('/').pop();
+                var currentRow = $(this).closest('tr');
+                $.ajax({
+                    url: '/Main/RemoveBasket',
+                    method: 'POST',
+                    data: {
+                        basketProductId: basketProductId
+                    },
+                    success: function (response) {
+                        if (inp) {
+
+                            var newTotalPrice = totalPrice - (productPrice * currentQuantity);
+                            $('.tp-cart-checkout-total .prc').text(newTotalPrice.toFixed(2));
+                            currentRow.remove();
+                        } else {
+                            currentRow.remove();
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            $('.tp-cart-plus').click(function () {
+                var productPrice = $(this).closest('tr').find('.tp-cart-price .das').text();
+                //.text().replace(/[^\d.-]/g, ''));
+                var totalPrice = $('.tp-cart-checkout-total .prc').text();
+                //.text().replace(/[^\d.-]/g, ''));
+                var priceAsNumber = parseFloat(productPrice.replace(/[^\d.-]/g, '.'));
+                var totalAsNumber = parseFloat(totalPrice.replace(/[^\d.-]/g, '.'));
+                ///
+                if (isNaN(priceAsNumber) || isNaN(totalAsNumber)) {
+                    $('.tp-cart-checkout-total .prc').text('Hata');
+                    return;
+                }
+                if (($(this).parents("td").next().next().children()[0]).checked) {
+                    var newTotalPrice = priceAsNumber + totalAsNumber;
+                    $('.tp-cart-checkout-total .prc').text(newTotalPrice.toFixed(2));
+                }
+
+                var quantityInput = $(this).closest('.tp-product-quantity').find('.tp-cart-input');
+                var currentQuantity = parseInt(quantityInput.val());
+                quantityInput.val(currentQuantity);
+                var basketProductId = $(this).closest('tr').find('.tp-cart-img a').attr('href').split('/').pop();
+
+                $.ajax({
+                    url: '/Main/QuantityChange',
+                    method: 'POST',
+                    data: {
+                        currentQuantity: currentQuantity,
+                        basketProductId: basketProductId
+                    },
+                    success: function (response) {
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+
+                var minusButton = $(this).closest('.tp-product-quantity').find('.tp-cart-minus .mini');
+                if (currentQuantity > 1) {
+                    minusButton.prop('disabled', false);
+                } else {
+                    minusButton.prop('disabled', true);
+                }
+            });
+        });
+
+
+        //$(document).ready(function () {
+        //    $('.plu').click(function () {
+        //        // Sayfayı yenile
+        //        location.reload();
+        //    });
+        //});
+
+
+
+        $(document).ready(function () {
+            $('.tp-cart-minus').click(function () {
+                var productPrice = parseFloat($(this).closest('tr').find('.tp-cart-price .das').text().replace(/[^\d.-]/g, '.'));
+                var totalPrice = parseFloat($('.tp-cart-checkout-total .prc').text().replace(/[^\d.-]/g, '.'));
+                if (isNaN(productPrice) || isNaN(totalPrice)) {
+                    $('.tp-cart-checkout-total .prc').text('Hata');
+                    return;
+                }
+                var newTotalPrice = totalPrice - productPrice;
+                if (newTotalPrice < 0) {
+                    newTotalPrice = 0;
+                }
+                if (($(this).parents("td").next().next().children()[0]).checked) {
+                    $('.tp-cart-checkout-total .prc').text(newTotalPrice.toFixed(2));
+                }
+
+                var quantityInput = $(this).closest('.tp-product-quantity').find('.tp-cart-input');
+                var currentQuantity = parseInt(quantityInput.val());
+                console.log(currentQuantity)
+                var basketProductId = $(this).closest('tr').find('.tp-cart-img a').attr('href').split('/').pop();
+
+                $.ajax({
+                    url: '/Main/QuantityChange',
+                    method: 'POST',
+                    data: {
+                        currentQuantity: currentQuantity,
+                        basketProductId: basketProductId
+                    },
+                    success: function (response) {
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+                var plusButton = $(this).closest('.tp-product-quantity').find('.tp-cart-minus .mini');
+                console.log(plusButton)
+                if (currentQuantity === 1) {
+                    console.log("tt")
+                    plusButton.prop('disabled', true);
+                }
+                else {
+                    plusButton.prop('disabled', false);
+                }
+            });
+        });
+    </script>
+}

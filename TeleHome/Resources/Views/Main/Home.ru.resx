@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Abunə ol" xml:space="preserve">
+    <value>Подписаться</value>
+  </data>
+  <data name="avqust" xml:space="preserve">
+    <value>август</value>
+  </data>
+  <data name="Bütün məhsullara pulsuz çatdırılma" xml:space="preserve">
+    <value>Бесплатная доставка на все товары</value>
+  </data>
+  <data name="Bütün yenİlİklərdən xəbərdar olmaq üçün" xml:space="preserve">
+    <value>Чтобы быть в курсе всех нововведений</value>
+  </data>
+  <data name="Dəqiqə" xml:space="preserve">
+    <value>Минута</value>
+  </data>
+  <data name="endirim" xml:space="preserve">
+    <value>скидка</value>
+  </data>
+  <data name="Endirimlər" xml:space="preserve">
+    <value>Скидки</value>
+  </data>
+  <data name="Gün" xml:space="preserve">
+    <value>День</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Home.ru" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Home.ru.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Həftə içi hər gün xidmətinizdəyik" xml:space="preserve">
+    <value>Мы в вашем распоряжении каждый день в будние дни</value>
+  </data>
+  <data name="Həftənin hər günü" xml:space="preserve">
+    <value>Каждый день недели</value>
+  </data>
+  <data name="Hər cibə uyğun qiymətlərlə..." xml:space="preserve">
+    <value>С разумными ценами на каждую пятницу...</value>
+  </data>
+  <data name="Hər məhsula xüsusi endirim" xml:space="preserve">
+    <value>Специальная скидка на каждый товар</value>
+  </data>
+  <data name="Hər növ elektronik cihazlardan ibarət geniş məhsul çeşidimizdə ən yaxşı markaları tapa bilərsiniz.Keyfiyyətli istehsalçılarla əməkdaşlıq edərək sizə ən son texnologiyaları təqdim edirik.Veb saytımızda və ya mağazamızda məhsullarımızı kəşf edə və sevimli məhsulunuzu seçə bilərsiniz." xml:space="preserve">
+    <value>Широкий ассортимент наших товаров включает в себя все виды электронных устройств, и вы можете найти лучшие бренды. Сотрудничая с качественными производителями, мы предоставляем вам последние технологии. Вы можете исследовать наши товары на нашем веб-сайте или в магазине и выбрать свой любимый продукт.</value>
+  </data>
+  <data name="Kampaniyanın başlama vaxtı" xml:space="preserve">
+    <value>Время начала кампании</value>
+  </data>
+  <data name="Kampaniyanın bitmə vaxtı" xml:space="preserve">
+    <value>Время окончания кампании</value>
+  </data>
+  <data name="Kampaniyanın vaxtı bitib" xml:space="preserve">
+    <value>Время акции истекло</value>
+  </data>
+  <data name="Mağazamızda ən yaxşı markalarla tanış olun..." xml:space="preserve">
+    <value>Познакомьтесь с лучшими брендами в нашем магазине...</value>
+  </data>
+  <data name="Məhsul tapılmadı" xml:space="preserve">
+    <value>Товар не найден</value>
+  </data>
+  <data name="Məhsulu bəyənmədik də geri qaytarın" xml:space="preserve">
+    <value>Если товар не понравился, верните назад</value>
+  </data>
+  <data name="Məhsulunuz səbətdən uğurla silindi!" xml:space="preserve">
+    <value>Товар успешно удален из корзины!</value>
+  </data>
+  <data name="Məhsulunuz səbətə uğurla əlavə edildi!" xml:space="preserve">
+    <value>Товар успешно добавлен в корзину!</value>
+  </data>
+  <data name="Populyar Məhsullar" xml:space="preserve">
+    <value>Популярные товары</value>
+  </data>
+  <data name="Poçt ünvanınızı daxil edin" xml:space="preserve">
+    <value>Введите ваш адрес электронной почты</value>
+  </data>
+  <data name="Pulsuz Çatdırılma" xml:space="preserve">
+    <value>Бесплатная доставка</value>
+  </data>
+  <data name="Saat" xml:space="preserve">
+    <value>Час</value>
+  </data>
+  <data name="Saatlardan qulaqlıqlara, telefonlardan digər elektronik məhsullara qədər geniş məhsul çeşidimizlə sizi gözləyirik. Sizə keyfiyyətli və yenilikçi məhsullar təqdim edərək ən son trendləri izləməyi hədəfləyirik. Əgər texnologiya dünyasında güvənli bir alış-veriş təcrübəsi yaşamaq istəyirsinizsə,doğru ünvandasınız!" xml:space="preserve">
+    <value>От часов до наушников, от телефонов до других электронных товаров, наше широкое разнообразие продукции ждет вас. Мы стремимся предоставить вам качественные и инновационные продукты, следуя за последними тенденциями. Если вы хотите иметь безопасный опыт покупок в мире технологий, то вы по адресу!</value>
+  </data>
+  <data name="Saniyə" xml:space="preserve">
+    <value>Секунда</value>
+  </data>
+  <data name="sentyabr" xml:space="preserve">
+    <value>сентябрь</value>
+  </data>
+  <data name="Stokda var" xml:space="preserve">
+    <value>В наличии</value>
+  </data>
+  <data name="Stokda yoxdur" xml:space="preserve">
+    <value>Нет в наличии</value>
+  </data>
+  <data name="Səbət" xml:space="preserve">
+    <value>Корзина</value>
+  </data>
+  <data name="Səhifəmizə abunə olun" xml:space="preserve">
+    <value>Подпишитесь на нашу страницу</value>
+  </data>
+  <data name="Texnologiyanı bizimlə kəşf edin!" xml:space="preserve">
+    <value>Исследуйте технологии вместе с нами!</value>
+  </data>
+  <data name="Xəta baş verdi" xml:space="preserve">
+    <value>Произошла ошибка</value>
+  </data>
+  <data name="Zəmanət" xml:space="preserve">
+    <value>Гарантия</value>
+  </data>
+  <data name="Zəmanət 1 il" xml:space="preserve">
+    <value>Гарантия 1 год</value>
+  </data>
+  <data name="İndi Al" xml:space="preserve">
+    <value>Теперь возьмите</value>
+  </data>
+  <data name="İstək siyahısına əlavə edin" xml:space="preserve">
+    <value>Добавить в список желаний</value>
+  </data>
+  <data name="Ən yeni məhsullar" xml:space="preserve">
+    <value>Самые новые товары</value>
+  </data>
+  <data name="Ən çox bəyənilənlər" xml:space="preserve">
+    <value>Самые популярные</value>
+  </data>
+  <data name="Ətraflı" xml:space="preserve">
+    <value>Подробнее</value>
+  </data>
+  <data name="Ətraflı bax" xml:space="preserve">
+    <value>Подробнее</value>
+  </data>
+</root>

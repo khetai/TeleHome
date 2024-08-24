@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "Contacts";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<Contact>
+@section Scripts{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(function () {
+            $('.delete').click(function () {
+                var row = $(this).parents('tr')
+                ad = $(this).parents("tr").children("td").eq(1).text()
+                Swal.fire({
+                    title: 'Əminsiniz mi?',
+                    text: `"${ad}" silmək istəyirsinizmi ?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Bəli, silinsin!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Silindi!',
+                            `"${ad}" silindi.`,
+                            'success'
+                        )
+                        $.post('../../Admin/DeleteContact/' + $(row).attr('postId'), function () {
+                            $(row).remove()
+                        })
+                    }
+                })
+            })
+        })
+    </script>
+    }
+@section Style{
+    <link rel="stylesheet" href="sweetalert2.min.css">
+    }
+
+
+<div id="main-content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Adı</th>
+                <th>Email</th>
+                <th>Başlıq</th>
+                <th>Mesaj</th>
+                <th class="text-center" colspan="1">Silmək</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr postId="@item.ContactId">
+                    <th>@(Model.IndexOf(item) + 1)</th>
+                    <td>@item.ContactName</td>
+                    <td>@item.ContactEmail</td>
+                    <td>@item.ContactTitle</td>
+                    <td>@item.ContactMessage</td>
+                    <td class="text-center"><a class="text-danger delete"><i class="fas fa-trash text-danger"></i></a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

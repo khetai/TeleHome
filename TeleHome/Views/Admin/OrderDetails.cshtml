@@ -1,0 +1,56 @@
+﻿@model Order
+
+
+<div id="main-content" class="container pb-1">
+    <table class="table" id="product-table">
+        <thead>
+            <tr>
+                <th>Adı</th>
+                <th>Sayi</th>
+                <th>Qiymət</th>
+                <th>Tarix</th>
+                <th>Unvan</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>odenis</th>
+            </tr>
+        </thead>
+        <tbody id="products">
+                <tr>
+                    <td>
+                    @if (Model.OrderUser != null)
+                    {
+                        @Model.OrderUser.UserName @Model.OrderUser.UserSurname
+                    }
+                        </td>
+                <td>@Model.OrderBaskets.Count()</td>
+                <td>@Model.OrderMoney ₼</td>
+                <td>@(((DateTime)Model.OrderDate).ToString("dd-MMM-yyyy")) </td>
+                <td>@Model.OrderUser.UserAddress</td>
+                <td>@Model.OrderUser.UserPhone</td>
+                <td>@Model.OrderUser.UserEmail</td>
+                <td class="stock">@(Model.OrderStatus == true ? "ugurlu" : "ugursuz")</td>
+                </tr>
+        </tbody>
+    </table>
+    <table class="table" id="product-table">
+        <thead>
+            <tr>
+                <th>Adı</th>
+                <th>Sayi</th>
+                <th>Qiymət</th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @foreach (OrderBasket item in Model.OrderBaskets)
+            {
+            <tr>
+                 <td>@item.OrderBasketProduct.ProductName</td>
+                <td>@item.OrderBasketCount</td>
+                <td>@item.OrderBasketProduct.ProductPrice ₼</td>
+            </tr>
+
+            }
+        </tbody>
+    </table>
+</div>

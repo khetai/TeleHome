@@ -1,0 +1,700 @@
+﻿@using System.Globalization;
+@model List<ProductWithCommentCount>;
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<main>
+
+    <section class="onslider tp-slider-area p-relative z-index-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">@await Component.InvokeAsync("BigCampaign")</div>
+                <div class="col-md-4">@await Component.InvokeAsync("Campaign")</div>
+            </div>
+        </div>
+    </section>
+
+
+    @*   <section class="tp-product-category pt-60 pb-15">
+    <div class="container">
+    <div class="row row-cols-xl-5 row-cols-lg-5 row-cols-md-4">
+    @await Component.InvokeAsync("SubCategoryList")
+    </div>
+    </div>
+    </section>*@
+    <hr />
+    <section>
+        <div class="slide-container swiper">
+            <h1 class="text-center" style="color:black;">Ən çox bəyənilən məhsullar</h1>
+            <div class="slide-content">
+                <div class="tab-pane" id="topsell-tab-pane" role="tabpanel" aria-labelledby="topsell-tab" tabindex="0">
+                    <div class="row">
+                        @if (ViewBag.TopSeller == null)
+                        {
+                            <h3>@localizer["Məhsul tapılmadı"]</h3>
+                        }
+                        else
+                        {
+                            @foreach (ProductWithCommentCount item1 in ViewBag.TopSeller)
+                            {
+                                <div class="col-md-3 col-sm-6 mt-4">
+                                    <div class="product-grid">
+                                        <div class="product-image">
+                                            <a href="~/main/productdetails/@item1.Product.ProductId" class="image">
+                                                <img class="pic-1 lazy" data-src="../sekiller/@item1.Product.ProductFirstPhotoUrl" alt="@item1.Product.ProductDeepCategory.DeepCategoryName">
+                                            </a>
+                                            <span class="@(item1.Product.ProductIsSctock==true ? "product-sale" : "product-hot")">@(item1.Product.ProductIsSctock == true ? localizer["Stokda var"] : localizer["Stokda yoxdur"])</span>
+                                            <ul class="product-links">
+                                                <li data-productid="@item1.Product.ProductId" onclick="postfavorite('@item1.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["İstək siyahısına əlavə edin"]"><i class="fas fa-heart @(item1.IsFavorite==true ? "text-danger" : "text-black")"></i></a></li>
+                                                <li data-productid="@item1.Product.ProductId" onclick="postbasket('@item1.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["Səbət"]"><i class="fa-solid fa-basket-shopping @(item1.IsBasket==true ? "text-primary" : "text-black")"></i></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product-content">
+                                            <h3 class="title"><a href="#">@(item1.Product.ProductName.Length < 20 ? item1.Product.ProductName.Substring(0, item1.Product.ProductName.Length) : item1.Product.ProductName.Substring(0, 20))</a></h3>
+
+                                            @{
+                                                var mainprice = item1.Product.ProductPrice;
+                                            }
+                                            @if (item1.Product.ProductWithoutPrice is not null)
+                                            {
+                                                <div class="price">@item1.Product.ProductWithoutPrice ₼</div>
+                                                <div class="second-price"><del>@string.Format("{0:N2}", mainprice) ₼</del></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="price">@item1.Product.ProductPrice ₼</div>
+                                            }
+                                            <a class="add-to-cart" href="~/main/productdetails/@item1.Product.ProductId">@localizer["Ətraflı bax"]</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                    </div>
+                </div>
+
+            </div>
+            @*<div class="swiper-pagination"></div>*@
+        </div>
+    </section>
+
+
+    <section class="tp-feature-area tp-feature-border-radius pb-70">
+        <div class="container">
+            <div class="row gx-1 gy-1 gy-xl-0">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="tp-feature-item d-flex align-items-start">
+                        <div class="tp-feature-icon mr-15">
+                            <span>
+                                <svg width="33" height="27" viewBox="0 0 33 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.7222 1H31.5555V19.0556H10.7222V1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M10.7222 7.94446H5.16667L1.00001 12.1111V19.0556H10.7222V7.94446Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M25.3055 26C23.3879 26 21.8333 24.4454 21.8333 22.5278C21.8333 20.6101 23.3879 19.0555 25.3055 19.0555C27.2232 19.0555 28.7778 20.6101 28.7778 22.5278C28.7778 24.4454 27.2232 26 25.3055 26Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M7.25001 26C5.33235 26 3.77778 24.4454 3.77778 22.5278C3.77778 20.6101 5.33235 19.0555 7.25001 19.0555C9.16766 19.0555 10.7222 20.6101 10.7222 22.5278C10.7222 24.4454 9.16766 26 7.25001 26Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="tp-feature-content">
+                            <h3 class="tp-feature-title">@localizer["Pulsuz Çatdırılma"]</h3>
+                            <p>@localizer["Bütün məhsullara pulsuz çatdırılma"]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="tp-feature-item d-flex align-items-start">
+                        <div class="tp-feature-icon mr-15">
+                            <span>
+                                <svg width="21" height="35" viewBox="0 0 21 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10.3636 1V34" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M17.8636 7H6.61365C5.22126 7 3.8859 7.55312 2.90134 8.53769C1.91677 9.52226 1.36365 10.8576 1.36365 12.25C1.36365 13.6424 1.91677 14.9777 2.90134 15.9623C3.8859 16.9469 5.22126 17.5 6.61365 17.5H14.1136C15.506 17.5 16.8414 18.0531 17.826 19.0377C18.8105 20.0223 19.3636 21.3576 19.3636 22.75C19.3636 24.1424 18.8105 25.4777 17.826 26.4623C16.8414 27.4469 15.506 28 14.1136 28H1.36365" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="tp-feature-content">
+                            <h3 class="tp-feature-title">@localizer["Zəmanət 1 il"]</h3>
+                            <p>@localizer["Məhsulu bəyənmədik də geri qaytarın"]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="tp-feature-item d-flex align-items-start">
+                        <div class="tp-feature-icon mr-15">
+                            <span>
+                                <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <mask id="mask0_1211_583" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="30">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H30.0024V29.9998H0V0Z" fill="white" />
+                                    </mask>
+                                    <g mask="url(#mask0_1211_583)">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.4168 27.1116C14.3017 27.9756 15.7266 27.9651 16.6056 27.0816L17.6885 26.0017C18.5285 25.1632 19.6894 24.6848 20.8728 24.6848H22.4178C23.6687 24.6848 24.6856 23.6678 24.6856 22.4184V20.875C24.6856 19.6736 25.1506 18.5441 25.9995 17.6937L27.0795 16.6122C27.519 16.1713 27.7544 15.5998 27.7529 14.9938C27.7514 14.3894 27.513 13.8209 27.0825 13.3919L26.001 12.309C25.1506 11.4525 24.6856 10.3246 24.6856 9.12318V7.58277C24.6856 6.33184 23.6687 5.3149 22.4178 5.3149H20.8758C19.6744 5.3149 18.545 4.84842 17.6945 4.00397L16.6116 2.91954C15.7101 2.02709 14.2717 2.03159 13.3913 2.91804L12.3128 3.99947C11.4519 4.84992 10.3225 5.3149 9.12553 5.3149H7.58212C6.33269 5.3164 5.31575 6.33334 5.31575 7.58277V9.12018C5.31575 10.3216 4.84927 11.451 4.00332 12.303L2.93839 13.3694C2.92789 13.3814 2.91739 13.3904 2.90689 13.4009C2.02644 14.2874 2.03094 15.7258 2.91739 16.6062L4.00032 17.6892C4.84927 18.5411 5.31575 19.6706 5.31575 20.872V22.4184C5.31575 23.6678 6.33119 24.6848 7.58212 24.6848H9.12253C10.3255 24.6863 11.4549 25.1527 12.3053 26.0002L13.3868 27.0786C13.3958 27.0891 13.4063 27.0996 13.4168 27.1116ZM14.9972 30.0002C13.8468 30.0002 12.6963 29.5652 11.8159 28.6923C11.8039 28.6803 11.7919 28.6683 11.7799 28.6548L10.715 27.5914C10.2905 27.1699 9.72352 26.9359 9.12055 26.9344H7.58164C5.09029 26.9344 3.06541 24.908 3.06541 22.4182V20.8717C3.06541 20.2688 2.82992 19.7033 2.40694 19.2773L1.32851 18.2004C-0.423392 16.4575 -0.444391 13.6197 1.27601 11.8498C1.28951 11.8363 1.30301 11.8228 1.31651 11.8093L2.40844 10.7143C2.82992 10.2899 3.06541 9.72139 3.06541 9.11993V7.58252C3.06541 5.09266 5.09029 3.06628 7.58014 3.06478H9.12505C9.72652 3.06478 10.2935 2.82929 10.724 2.40482L11.7964 1.32938C13.5498 -0.436017 16.4161 -0.445016 18.1845 1.31288L19.281 2.40932C19.7054 2.83079 20.2724 3.06478 20.8754 3.06478H22.4173C24.9086 3.06478 26.935 5.09116 26.935 7.58252V9.12293C26.935 9.72439 27.169 10.2929 27.5935 10.7203L28.6704 11.7988C29.5239 12.6462 29.9978 13.7787 30.0023 14.9861C30.0068 16.1935 29.5404 17.329 28.6899 18.1854L27.5905 19.2818C27.169 19.7063 26.935 20.2718 26.935 20.8747V22.4182C26.935 24.908 24.9086 26.9344 22.4188 26.9344H20.8724C20.2784 26.9344 19.6979 27.1744 19.2765 27.5929L18.1995 28.6698C17.3191 29.5562 16.1581 30.0002 14.9972 30.0002Z" fill="currentColor" />
+                                    </g>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.145 19.9811C10.857 19.9811 10.569 19.8716 10.3501 19.6511C9.91058 19.2116 9.91058 18.5006 10.3501 18.0612L18.0596 10.3501C18.4991 9.91064 19.2115 9.91064 19.651 10.3501C20.0905 10.7896 20.0905 11.502 19.651 11.9415L11.94 19.6511C11.721 19.8716 11.433 19.9811 11.145 19.9811Z" fill="currentColor" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M18.7544 20.2476C17.925 20.2476 17.247 19.5772 17.247 18.7477C17.247 17.9183 17.9115 17.2478 18.7409 17.2478H18.7544C19.5839 17.2478 20.2543 17.9183 20.2543 18.7477C20.2543 19.5772 19.5839 20.2476 18.7544 20.2476Z" fill="currentColor" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.2548 12.748C10.4254 12.748 9.74744 12.0775 9.74744 11.2481C9.74744 10.4186 10.4119 9.74817 11.2413 9.74817H11.2548C12.0843 9.74817 12.7548 10.4186 12.7548 11.2481C12.7548 12.0775 12.0843 12.748 11.2548 12.748Z" fill="currentColor" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="tp-feature-content">
+                            <h3 class="tp-feature-title">@localizer["Endirimlər"]</h3>
+                            <p>@localizer["Hər məhsula xüsusi endirim"]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="tp-feature-item d-flex align-items-start">
+                        <div class="tp-feature-icon mr-15">
+                            <span>
+                                <svg width="31" height="30" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.5 24.3333V15C1.5 11.287 2.975 7.72602 5.60051 5.10051C8.22602 2.475 11.787 1 15.5 1C19.213 1 22.774 2.475 25.3995 5.10051C28.025 7.72602 29.5 11.287 29.5 15V24.3333" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M29.5 25.8889C29.5 26.714 29.1722 27.5053 28.5888 28.0888C28.0053 28.6722 27.214 29 26.3889 29H24.8333C24.0082 29 23.2169 28.6722 22.6335 28.0888C22.05 27.5053 21.7222 26.714 21.7222 25.8889V21.2222C21.7222 20.3971 22.05 19.6058 22.6335 19.0223C23.2169 18.4389 24.0082 18.1111 24.8333 18.1111H29.5V25.8889ZM1.5 25.8889C1.5 26.714 1.82778 27.5053 2.41122 28.0888C2.99467 28.6722 3.78599 29 4.61111 29H6.16667C6.99179 29 7.78311 28.6722 8.36656 28.0888C8.95 27.5053 9.27778 26.714 9.27778 25.8889V21.2222C9.27778 20.3971 8.95 19.6058 8.36656 19.0223C7.78311 18.4389 6.99179 18.1111 6.16667 18.1111H1.5V25.8889Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="tp-feature-content">
+                            <h3 class="tp-feature-title">@localizer["Həftənin hər günü"]</h3>
+                            <p>@localizer["Həftə içi hər gün xidmətinizdəyik"]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tp-product-area pb-55" id="populyarMehsullar">
+        <div class="container">
+            <div class="row align-items-end">
+                <div class="col-xl-5 col-lg-6 col-md-5">
+                    <div class="tp-section-title-wrapper mb-40">
+                        <h3 class="tp-section-title">
+                            @localizer["Populyar Məhsullar"]
+
+                            <svg width="114" height="35" viewBox="0 0 114 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M112 23.275C1.84952 -10.6834 -7.36586 1.48086 7.50443 32.9053" stroke="currentColor" stroke-width="4" stroke-miterlimit="3.8637" stroke-linecap="round" />
+                            </svg>
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-6 col-md-7">
+                    <div class="tp-product-tab tp-product-tab-border mb-45 tp-tab d-flex justify-content-md-end">
+                        <ul class="nav nav-tabs justify-content-sm-end" id="productTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="new-tab" data-bs-toggle="tab" data-bs-target="#new-tab-pane" type="button" role="tab" aria-controls="new-tab-pane" aria-selected="true">
+                                    @localizer["Ən yeni məhsullar"]
+                                    <span class="tp-product-tab-line">
+                                        <svg width="52" height="13" viewBox="0 0 52 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 8.97127C11.6061 -5.48521 33 3.99996 51 11.4635" stroke="currentColor" stroke-width="2" stroke-miterlimit="3.8637" stroke-linecap="round" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="topsell-tab" data-bs-toggle="tab" data-bs-target="#topsell-tab-pane" type="button" role="tab" aria-controls="topsell-tab-pane" aria-selected="false">
+                                    @localizer[""]
+                                    <span class="tp-product-tab-line">
+                                        <svg width="52" height="13" viewBox="0 0 52 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 8.97127C11.6061 -5.48521 33 3.99996 51 11.4635" stroke="currentColor" stroke-width="2" stroke-miterlimit="3.8637" stroke-linecap="round" />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="tp-product-tab-content">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="new-tab-pane" role="tabpanel" aria-labelledby="new-tab" tabindex="0">
+                                <div class="row">
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class="col-md-4 col-sm-6 mt-4">
+                                            <div class="product-grid">
+                                                <div class="product-image">
+                                                    <a href="~/main/productdetails/@item.Product.ProductId" class="image">
+                                                        <img class="pic-1" src="../sekiller/@item.Product.ProductFirstPhotoUrl" alt="@item.Product.ProductDeepCategory.DeepCategoryName">
+                                                    </a>
+                                                    <span class="@(item.Product.ProductIsSctock==true ? "product-sale" : "product-hot")">@(item.Product.ProductIsSctock == true ? localizer["Stokda var"] : localizer["Stokda yoxdur"])</span>
+                                                    <ul class="product-links">
+                                                        <li data-productid="@item.Product.ProductId" onclick="postfavorite('@item.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["İstək siyahısına əlavə edin"]"><i class="fas fa-heart @(item.IsFavorite==true ? "text-danger" : "text-black")"></i></a></li>
+                                                        <li data-productid="@item.Product.ProductId" onclick="postbasket('@item.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["Səbət"]"><i class="fa-solid fa-basket-shopping @(item.IsBasket==true ? "text-primary" : "text-black")"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product-content">
+                                                    <h3 class="title"><a href="#">@(item.Product.ProductName.Length < 20 ? item.Product.ProductName.Substring(0, item.Product.ProductName.Length) : item.Product.ProductName.Substring(0, 20))</a></h3>
+                                                    @{
+                                                        var mainprice = item.Product.ProductPrice;
+                                                    }
+                                                    @if (item.Product.ProductWithoutPrice is not null)
+                                                    {
+                                                        <div class="price">@item.Product.ProductWithoutPrice ₼</div>
+                                                        <div class="second-price"><del>@string.Format("{0:N2}", mainprice) ₼</del></div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="price">@item.Product.ProductPrice ₼</div>
+                                                    }
+                                                    <a class="add-to-cart" href="~/main/productdetails/@item.Product.ProductId">@localizer["Ətraflı bax"]</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="usedBrands">
+        <div class="container">
+            @foreach (var item in ViewBag.UsedBrandsView)
+            {
+                <div>
+                    <img src="~/img/@item.BrandsPhoto" />
+                </div>
+            }
+
+        </div>
+    </section>
+
+    <section class="calculatorSection">
+    </section>
+
+    <section class="tp-subscribe-area pt-70 pb-65 theme-bg p-relative z-index-1">
+        @*        <div class="tp-subscribe-shape">
+        <img class="tp-subscribe-shape-1 lazy" data-src="../img/subscribe/subscribe-shape-1.png" alt="televizor">
+        <img class="tp-subscribe-shape-2 lazy" data-src="../img/subscribe/subscribe-shape-2.png" alt="televizor">
+        <img class="tp-subscribe-shape-3 lazy" data-src="../img/subscribe/subscribe-shape-3.png" alt="televizor">
+        <img class="tp-subscribe-shape-4 lazy" data-src="../img/subscribe/subscribe-shape-4.png" alt="televizor">
+        <div class="tp-subscribe-plane">
+        <img class="tp-subscribe-plane-shape lazy" data-src="../img/subscribe/plane.png" alt="Telehome">
+        <svg width="399" height="110" class="d-none d-sm-block" viewBox="0 0 399 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0.499634 1.00049C8.5 20.0005 54.2733 13.6435 60.5 40.0005C65.6128 61.6426 26.4546 130.331 15 90.0005C-9 5.5 176.5 127.5 218.5 106.5C301.051 65.2247 202 -57.9188 344.5 40.0003C364 53.3997 384 22 399 22" stroke="white" stroke-opacity="0.5" stroke-dasharray="3 3" />
+        </svg>
+        <svg class="d-sm-none" width="193" height="110" viewBox="0 0 193 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1C4.85463 20.0046 26.9085 13.6461 29.9086 40.0095C32.372 61.6569 13.5053 130.362 7.98637 90.0217C-3.57698 5.50061 85.7981 127.53 106.034 106.525C145.807 65.2398 98.0842 -57.9337 166.742 40.0093C176.137 53.412 185.773 22.0046 193 22.0046" stroke="white" stroke-opacity="0.5" stroke-dasharray="3 3" />
+        </svg>
+        </div>
+        </div>
+        *@        <div class="container">
+            <div class="row align-items-center">
+                @*                <div class="col-xl-7 col-lg-7">
+                <div class="tp-subscribe-content">
+                <h3 class="tp-subscribe-title">@localizer[""]</h3>
+                </div>
+                </div>
+                *@                <div class="col-xl-5 col-lg-5">
+                    <div class="tp-subscribe-form">
+                        <form action="/Main/Subscribe" method="post">
+                            <div class="tp-subscribe-input">
+                                <input type="email" placeholder="@localizer["Poçt ünvanınızı daxil edin"]" name="SubscribeEmail" required>
+                                <button>@localizer["yeniliklər üçün abunə ol"]</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</main>
+
+@section style {
+    <link href="~/css/home.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .campaign-card {
+            position: relative;
+        }
+
+            .campaign-card .campaign-name {
+                font-weight: 500;
+            }
+    </style>
+}
+
+
+@section scripts {
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var owl = $('.carousel-first, .carousel-second');
+        owl.owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 10,
+            nav: false,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 4000,
+            autoplayHoverPause: true,
+            animateOut: 'fadeOut',
+            animateIn: 'fadeIn',
+            smartSpeed: 450 // Fade efekti için geçiş süresi
+        });
+
+    </script>
+    <script>
+        var swiper = new Swiper(".slide-content", {
+            slidesPerView: 3,
+            spaceBetween: 25,
+            loop: true,
+            centerSlide: 'true',
+            fade: 'true',
+            grabCursor: 'true',
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+                dynamicBullets: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                },
+                520: {
+                    slidesPerView: 2,
+                },
+                950: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+
+
+        function convertToISODate(dateString) {
+            var dateRegex = /^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{4}) (\d{1,2}):(\d{2}):(\d{2}) ([ap]m)$/i;
+            var dateMatch = dateString.match(dateRegex);
+
+            if (!dateMatch) {
+                return null;
+            }
+
+            var day, month, year, hours, minutes, seconds, ampm;
+
+            if (dateString.includes("/")) {
+                day = parseInt(dateMatch[2]);
+                month = parseInt(dateMatch[1]) - 1;
+                year = parseInt(dateMatch[3]);
+            } else {
+                day = parseInt(dateMatch[1]);
+                month = parseInt(dateMatch[2]) - 1;
+                year = parseInt(dateMatch[3]);
+            }
+
+            hours = parseInt(dateMatch[4]);
+            minutes = parseInt(dateMatch[5]);
+            seconds = parseInt(dateMatch[6]);
+            ampm = dateMatch[7].toLowerCase();
+
+            if (ampm === "pm" && hours < 12) {
+                hours += 12;
+            } else if (ampm === "am" && hours === 12) {
+                hours = 0;
+            }
+
+            var formattedDate = new Date(year, month, day, hours, minutes, seconds);
+
+            return formattedDate.toISOString();
+        }
+        var countdownElements = document.querySelectorAll('.tp-product-countdown');
+
+
+
+        function convertToISODate(dateString) {
+            const parts = dateString.split(' ');
+            const dateParts = parts[0].split('.');
+            const timeParts = parts[1].split(':');
+            const isoDate = new Date(Date.UTC(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1], timeParts[2]));
+            return isoDate.toISOString();
+        }
+        countdownElements.forEach(function (countdownElement) {
+            var startDateString = countdownElement.getAttribute('startdate');
+            var endDateString = countdownElement.getAttribute('enddate');
+            var trinfo = document.querySelectorAll('.tr-info');
+
+            var countdownTimer = setInterval(function () {
+                var now = new Date();
+                var startDateISOString = convertToISODate(startDateString);
+                var endDateISOString = convertToISODate(endDateString);
+                var ch = new Date(startDateISOString) - now;
+                var timeDiff = 0;
+                if (ch > 0) {
+                    timeDiff = new Date(startDateISOString) - now;
+                    countdownElement.querySelector('[tr-info]').innerHTML = `@localizer["Kampaniyanın başlama vaxtı"]`;
+
+                } else {
+                    countdownElement.querySelector('[tr-info]').innerHTML = `@localizer["Kampaniyanın bitmə vaxtı"]`;
+                    timeDiff = new Date(endDateISOString) - now;
+                }
+
+                if (timeDiff <= 0) {
+                    clearInterval(countdownTimer);
+                    countdownElement.querySelector('[tr-info]').innerHTML = `@localizer["Kampaniyanın vaxtı bitib"]`;
+                    countdownElement.querySelector('[tdays]').innerHTML = 0;
+                    countdownElement.querySelector('[thours]').innerHTML = 0;
+                    countdownElement.querySelector('[tminutes]').innerHTML = 0;
+                    countdownElement.querySelector('[tseconds]').innerHTML = 0;
+                } else {
+                    var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                    countdownElement.querySelector('[tdays]').innerHTML = days;
+                    countdownElement.querySelector('[thours]').innerHTML = hours;
+                    countdownElement.querySelector('[tminutes]').innerHTML = minutes;
+                    countdownElement.querySelector('[tseconds]').innerHTML = seconds;
+                }
+            }, 1000);
+        });
+
+
+
+        // var countdownElements = document.querySelectorAll('.tp-product-countdown');
+        // countdownElements.forEach(function (countdownElement) {
+        //     var startDateString = countdownElement.getAttribute('startdate');
+        //     var endDateString = countdownElement.getAttribute('enddate');
+
+        //     var startDateISOString = convertToISODate(startDateString);
+        //     var endDateISOString = convertToISODate(endDateString);
+
+        //     var countdownTimer = setInterval(function () {
+        //         var now = new Date();
+
+        //         var timeDiff = new Date(endDateISOString) - new Date(now)
+        //         console.log(endDateISOString)
+        //         console.log(now)
+        //         var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        //         var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        //         var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        //         var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        //         countdownElement.querySelector('[tdays]').innerHTML = days;
+        //         countdownElement.querySelector('[thours]').innerHTML = hours;
+        //         countdownElement.querySelector('[tminutes]').innerHTML = minutes;
+        //         countdownElement.querySelector('[tseconds]').innerHTML = seconds;
+
+        //         // if (timeDiff < 0) {
+        //         //     clearInterval(countdownTimer);
+        //         //     countdownElement.innerHTML = '@localizer["Kampaniyanın vaxtı bitib"]';
+        //         // }
+        //     }, 1000);
+        // });
+
+
+
+
+
+        $('.slick-wrap').on('init', function (event, slick) {
+            var dots = $('.slick-dots li');
+            dots.each(function (k, v) {
+                $(this).find('button').addClass('heading' + k);
+            });
+            var items = slick.$slides;
+            items.each(function (k, v) {
+                var text = $(this).find('h2').text();
+                $('.heading' + k).text(text);
+            });
+        });
+        $('.slick-wrap').slick({
+            dots: true,
+            focusOnSelect: true,
+            infinite: true,
+            arrows: false,
+            speed: 300,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            centerMode: true,
+            centerPadding: '30px',
+        });
+
+        var bskt = document.querySelector('.bskt');
+        var fvrt = document.querySelector('.fvrt');
+        function postfavorite(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            console.log(productId)
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostFavorite',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    console.log(res);
+                    var heartIcon = $(`li[data-productid="${productId}"] i.fa-heart`);
+                    if (heartIcon.hasClass('text-danger')) {
+                        fvrt.textContent = parseInt(fvrt.textContent) - 1;
+                        heartIcon.removeClass('text-danger');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        fvrt.textContent = parseInt(fvrt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-danger');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+        function postbasket(productId) {
+
+            // if (!isUserAuthenticated()) {
+            //     window.location.href = "/main/login";
+            //     return;
+            // }
+            console.log(productId)
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostBasket',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+
+                    console.log(res);
+                    var heartIcon = $(`li[data-productid="${productId}"] i.fa-basket-shopping`);
+                    if (heartIcon.hasClass('text-primary')) {
+                        toastNotif({
+                            text: '@localizer["Məhsulunuz səbətdən uğurla silindi!"]',
+                            color: '#d92402',
+                            timeout: 2000,
+                            icon: 'error'
+                        });
+                        bskt.textContent = parseInt(bskt.textContent) - 1;
+                        heartIcon.removeClass('text-primary');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        toastNotif({
+                            text: '@localizer["Məhsulunuz səbətə uğurla əlavə edildi!"]',
+                            color: '#35ac18',
+                            timeout: 2000,
+                            icon: 'valid'
+                        });
+                        bskt.textContent = parseInt(bskt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-primary');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+
+
+    </script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+            function isUserAuthenticated() {
+                return true;
+            }
+        </script>
+    }
+    else
+    {
+        <script>
+            function isUserAuthenticated() {
+                return false;
+            }
+        </script>
+    }
+}
+
+<style>
+
+
+    .RightCarousel h2 {
+        margin: 0;
+        color: #666;
+        padding-top: 90px;
+        font-size: 52px;
+        font-family: "trebuchet ms", sans-serif;
+    }
+
+    .RightCarousel .item {
+        background: white;
+        text-align: center;
+        height: 300px !important;
+    }
+
+    .RightCarousel .carousel {
+        margin-top: 20px;
+    }
+
+    .RightCarousel {
+        margin: 20px;
+    }
+
+        .RightCarousel .carousel.carousel-fade .item {
+            opacity: 0;
+            filter: alpha(opacity=0); /* ie fix */
+        }
+
+        .RightCarousel .carousel.carousel-fade .active.item {
+            opacity: 1;
+            filter: alpha(opacity=100); /* ie fix */
+        }
+
+
+    /* owl carousel */
+    .owl-carousel .animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+    }
+
+    .owl-carousel .owl-animated-out {
+        z-index: 1;
+        animation-name: fadeOut;
+    }
+
+    .owl-carousel .owl-animated-in {
+        z-index: 2;
+        animation-name: fadeIn;
+    }
+
+    @@keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+</style>

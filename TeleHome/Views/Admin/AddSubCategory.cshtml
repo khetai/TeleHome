@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "AddSubCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<Category>
+
+<div id="main-content">
+    <div class="card">
+        <div class="container-fluid">
+            <div class="title">Yeni alt kateqoriya</div>
+            <div class="content">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Kateqoriyalar</label>
+                                <select id="subCategory" class="form-control" name="SubCategoryCategoryId">
+                                    @foreach (var item in Model)
+                                    {
+                                        <option value="@item.CategoryId">@item.CategoryName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Alt kateqoriya ad</label>
+                                <input type="text" class="form-control" required name="SubCategoryName">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Şəkil</label>
+                                <input type="file" class="form-control" required name="formFile">
+                            </div>
+                        </div>
+                      
+
+
+                    </div>
+                    <button type="submit" class="btn btn-success">Əlavə et</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

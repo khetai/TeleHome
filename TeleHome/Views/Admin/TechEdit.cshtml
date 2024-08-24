@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "AddTech";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model TechCharacteristic
+
+<div id="main-content">
+    <div class="card">
+        <div class="container-fluid">
+            <div class="title">Yeni texniki xüsusiyyətlər</div>
+            <div class="content">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Alt kateqoriya</label>
+                                <select id="subCategory" class="form-control" name="TechCharacteristicSubCategoryId">
+                                    @foreach (var item in ViewBag.sub)
+                                    {
+                                        <option value="@item.SubCategoryId">@item.SubCategoryName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Texniki xüsusiyyət</label>
+                              
+                                <input value="@Model.TechCharacteristicName" type="text" class="form-control" name="TechCharacteristicName">
+                                <input value="@Model.TechCharacteristicId" name="TechCharacteristicId" hidden/>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Əlavə et</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

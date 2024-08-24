@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "AddCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<Icon>
+
+<div id="main-content">
+    <div class="card">
+        <div class="container-fluid">
+            <div class="title">Yeni kateqoriya</div>
+            <div class="content">
+                <form method="post" action="~/Admin/AddCategory" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Kateqoriya</label>
+                                <input type="text" class="form-control" required name="CategoryName">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Şəkil(format: .SVG)</label>
+                                <input type="file" class="form-control" required name="filephoto">
+                            </div>
+                        </div>
+                      
+                    </div>
+                    <button type="submit" class="btn btn-success">Əlavə et</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+	select{
+		font-family: fontAwesome
+	}
+</style>
+

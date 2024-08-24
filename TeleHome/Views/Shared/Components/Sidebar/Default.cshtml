@@ -1,0 +1,74 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<div class="cartmini__area tp-all-font-roboto">
+    <div class="cartmini__wrapper d-flex justify-content-between flex-column">
+        <div class="cartmini__top-wrapper">
+            <div class="cartmini__top p-relative">
+                <div class="cartmini__top-title">
+                    <h4>@localizer["Bəyənilənlər"]</h4>
+                </div>
+                <div class="cartmini__close">
+                    <button type="button" class="cartmini__close-btn cartmini-close-btn"><i class="fal fa-times"></i></button>
+                </div>
+            </div>
+            <div class="cartmini__widget" id="favitmes">
+                @if (ViewBag.Favorite != null)
+                {
+                    @foreach (Favorite item in ViewBag.Favorite)
+                    {
+                        <div class="cartmini__widget-item">
+                            <div class="cartmini__thumb">
+                                <a href="~/main/productdetails/@item.FavoriteProductId">
+                                    <img src="~/sekiller/@item.FavoriteProduct.ProductFirstPhotoUrl" alt="@item.FavoriteProduct.ProductName">
+                                </a>
+                            </div>
+                            <div class="cartmini__content">
+                                <h5 class="cartmini__title"><a href="~/main/productdetails/@item.FavoriteProductId">@item.FavoriteProduct.ProductName</a></h5>
+                                <div class="cartmini__price-wrapper">
+                                    <span class="cartmini__price">@item.FavoriteProduct.ProductPrice ₼</span>
+                                </div>
+                            </div>
+                            <p style="cursor:pointer;" class="cartmini__del" data-favoriteid="@item.FavoriteId"><i class="fa-solid fa-xmark"></i></p>
+                        </div>
+                    }
+                }
+                else
+                {
+
+                }
+            </div>
+          
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+      
+        // var fvrt = document.querySelector('.fvrt');
+
+        // var deleteButtons = document.getElementsByClassName("cartmini__del");
+
+        // for (var i = 0; i < deleteButtons.length; i++) {
+        //     deleteButtons[i].addEventListener("onclick", function () {
+        //         console.log("Sssss");
+        //         var favoriteId = this.getAttribute("data-favoriteid");
+        //         var buttonElement = this;
+
+        //         var xhr = new XMLHttpRequest();
+        //         xhr.open("DELETE", "/main/deletefavorite/" + favoriteId, true);
+        //         xhr.setRequestHeader("Content-Type", "application/json");
+        //         xhr.onreadystatechange = function () {
+        //             if (xhr.readyState === 4 && xhr.status === 200) {
+        //                 var item = buttonElement.parentNode;
+        //                 item.parentNode.removeChild(item);
+        //                 fvrt.textContent = parseInt(fvrt.textContent) - 1;
+        //                 console.log("success");
+        //             }
+        //         };
+        //         xhr.send();
+        //     });
+        // }
+
+    </script>
+
+}

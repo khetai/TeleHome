@@ -1,0 +1,87 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="keywords" content="Telehome, elektronik cihazlar, mobil telefon, telefon, televizor, kompüter, ağıllı saat, smart watch, airpods, qulaqlıq">
+    <meta name="author" content="AimTech, Telehome">
+    <meta name="description" content="Telehome, elektronik cihazlar, mobil telefon, telefon, televizor, kompüter, ağıllı saat, smart watch, airpods, qulaqlıq">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Telehome -Elektronik Cihazların Satışı">
+    <meta property="og:description" content="Telehome, uyğun qiymətlərlə ən yeni elektronik cihazları təqdim edən öncül bir şirkətdir.">
+    <meta property="og:image" content="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUaalpp00tFMT2G_vhx9ua0CHZx25LaRcXGQh2o2NCaZcQWyVLO7mGj87NDyKRaJjwwQM&usqp=CAU">
+    <meta property="og:url" content="http://www.telehome.az/">
+    <title>Telehome(Admin Panel)</title>
+    <link href="~/css/adminstyle.css" rel="stylesheet" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" />
+    <link href="~/css/notification.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="~/js/adminscript.js"></script>
+
+    @await RenderSectionAsync("Style", required: false)
+
+</head>
+
+<body>
+    <div id="warraper">
+        <div id="logo"><span>Telehome(Admin Panel)</span></div>
+        <span id="show-label-menu">using only small screen</span>
+        <div id="left-menu">
+            <ul>
+                <li><a href="~/admin/newproduct"><i class="fa-solid fa-plus"></i><span>Yeni məhsul</span></a></li>
+                <li><a href="~/admin/home"><i class="fa-brands fa-product-hunt"></i><span>Məhsullar</span></a></li>
+                <li><a href="~/admin/addcategory"><i class="fa-solid fa-plus"></i><span>Yeni kateqoriya</span></a></li>
+                <li><a href="~/admin/categories"><i class="fa-solid fa-c"></i><span>Kateqoriyalar</span></a></li>
+                <li><a href="~/admin/CreateCampaign"><i class="fa-solid fa-plus"></i><span>Yeni kampaniya</span></a></li>
+                <li><a href="~/admin/AddBigCampaign"><i class="fa-solid fa-plus"></i><span>Yeni Böyük kampaniya</span></a></li>
+                <li><a href="~/admin/BigCampaigns"><i class="fa-solid fa-plus"></i><span>Böyük kampaniyalar</span></a></li>
+                <li><a href="~/admin/Campaigns"><i class="fa-solid fa-business-time"></i><span>Kampaniyalar</span></a></li>
+                <li><a href="~/admin/AddSubCategory"><i class="fa-solid fa-plus"></i><span>Yeni alt kateqoriya</span></a></li>
+                <li><a href="~/admin/ChooseSubCategory"><i class="fa-solid fa-c"></i><span>Alt kateqoriyalar</span></a></li>
+                <li><a href="~/admin/AddDeepCategory"><i class="fa-regular fa-square-plus"></i><span>Yeni brend</span></a></li>
+                <li><a href="~/admin/AddTech"><i class="fa-regular fa-square-plus"></i><span>Yeni texniki xüsusiyyət</span></a></li>
+                <li><a href="~/admin/Techs"><i class="fa-regular fa-square-plus"></i><span>Texniki xüsusiyyətlər</span></a></li>
+                <li><a href="~/admin/AddBrands"><i class="fa-regular fa-square-plus"></i><span>Yeni brend şəkli əlavə et</span></a></li>
+                <li><a href="~/admin/Orders"><i class="fa-regular fa-square-plus"></i><span>Sifarişlər</span></a></li>
+                <li><a href="/" target="_blank"><i class="fa-solid fa-right-from-bracket"></i><span>Səhifəyə get</span></a></li>
+            </ul>
+        </div>
+        <div id="top-header">
+            <i class="icon-user float-right"></i>
+            <i class="icon-speech float-right"></i>
+            <i id="toggle-menu" class="fa-solid fa-bars"></i>
+        </div>
+        @RenderBody()
+    </div>
+    <script>
+        $('#toggle-menu').click(function () {
+            $('#warraper').toggleClass('small-menu');
+        });
+
+        $(document).ready(function () {
+            var url = window.location.pathname;
+            $("#left-menu ul li a").each(function () {
+                if ($(this).attr("href") === url) {
+                    $(this).parent().addClass("active");
+                }
+            });
+        });
+    </script>
+    <script src="~/js/notification.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+﻿@model ICollection<BigCampaign>
+
+
+<div class="owl-carousel carousel-first owl-theme karuselYeke">
+    @foreach (var slider in Model)
+    {
+        <div class="item">
+            <img src="~/BigCompany/@slider.BigCampaignPicture" alt="Telehome" class="d-block" style="width:876px; height:422px;">
+        </div>
+    }
+</div>

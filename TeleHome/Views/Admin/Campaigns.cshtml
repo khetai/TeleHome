@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Campaigns";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<Campaign>
+
+@section Scripts{
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(function () {
+            $('.delete').click(function () {
+                var row = $(this).parents('tr')
+                ad = $(this).parents("tr").children("td").eq(1).text()
+                Swal.fire({
+                    title: 'Əminsiniz mi?',
+                    text: `"${ad}" kampaniyasını silmək istəyirsinizmi ?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Bəli, silinsin!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Silindi!',
+                            `"${ad}" adlı kampaniya silindi.`,
+                            'success'
+                        )
+                        $.post('../../Admin/DeleteCampaign/' + $(row).attr('postId'), function () {
+                            $(row).remove()
+                        })
+                    }
+                })
+            })
+        })
+    </script>
+    }
+@section Style{
+    <link rel="stylesheet" href="sweetalert2.min.css">
+    }
+
+<div id="main-content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class="text-center">Şəkil</th>
+                <th>Adı</th>
+                <th>Brend</th>
+                <th>Başlama Tarix</th>
+                <th>Bitmə Tarix</th>
+                <th class="text-center" colspan="3"><a href="~/admin/CreateCampaign"><i class="fa-solid fa-plus"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr postId="@item.CampaignId">
+                    <th>@(Model.IndexOf(item) + 1)</th>
+                    <td style="width:20%;" class="text-center"><img class="skle" src="~/sekiller/@item.CampaignImage" /></td>
+                    <td>@item.CampaignName</td>
+                    <td>@item.CampaignDeepCategory.DeepCategoryName</td>
+                    <td>@(((DateTime)item.CampaignStartDate).ToString("dd-MMM-yyyy"))</td>
+                    <td>@(((DateTime)item.CampaignEndDate).ToString("dd-MMM-yyyy"))</td>
+                    <td class="text-center"><a class="text-success" href="~/Admin/EditCampaign/@item.CampaignId"><i class="fas fa-edit text-success"></i></a></td>
+                    <td class="text-center"><a class="text-danger delete"><i class="fas fa-trash text-danger"></i></a></td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .skle {
+        width: 25%;
+    }
+
+    @@media(max-width:768px) {
+        .skle {
+            width: 100% !important;
+        }
+    }
+</style>

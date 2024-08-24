@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "ChooseCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<SubCategory>
+
+<div id="main-content">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Adı</th>
+                <th class="text-center">Şəkil</th>
+                <th>Aktivlik</th>
+                <th class="text-center" colspan="3"><a href="~/admin/AddSubCategory"><i class="fa-solid fa-plus"></i></a></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr postId="@item.SubCategoryId">
+                    <th>@(Model.IndexOf(item) + 1)</th>
+                    <th>@item.SubCategoryName</th>
+                    <td style="width:20%;" class="text-center"><img style="width:25%" src="~/sekiller/@item.SubCategoryPhotoUrl" /></td>
+                    <td class="activ">@(item.SubCategoryIsActive == true ? "Aktivdir" : "Passivdir")</td>
+                    <td class="text-center"><a class="text-black" style="cursor:pointer;" data-productid="@item.SubCategoryId" onclick="postactive('@item.SubCategoryId')"><i class="fa-solid act @(item.SubCategoryIsActive == true ? "fa-a" : "fa-p")"></i></a></td>
+                    <th class="text-center"><a href="~/admin/editsubcategory/@item.SubCategoryId"><i class="fa-solid fa-pen-to-square text-success"></i></a></th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+    function postactive(productId) {
+        var formdata = new FormData();
+        formdata.append('productId', productId);
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/IsCategoryActive',
+            data: formdata,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (res) => {
+                var heartIcon = $(`a[data-productid="${productId}"] i.act`);
+                console.log(heartIcon)
+                if (heartIcon.hasClass('fa-a')) {
+                    toastNotif({
+                        text: 'Alt kateqoriya artıq səhifədə görünməyəcək!',
+                        color: '#d92402',
+                        timeout: 2000,
+                        icon: 'error'
+                    });
+                    $(`tr[postId="${productId}"] .activ`).text("Passivdir");
+                    heartIcon.removeClass('fa-a');
+                    heartIcon.addClass('fa-p');
+                } else {
+                    toastNotif({
+                        text: 'Alt kateqoriya artıq səhifədə görünəcək',
+                        color: '#35ac18',
+                        timeout: 2000,
+                        icon: 'valid'
+                    });
+                    $(`tr[postId="${productId}"] .activ`).text("Aktivdir");
+                    heartIcon.removeClass('fa-p');
+                    heartIcon.addClass('fa-a');
+                }
+            },
+            error: function () {
+                console.log('Xəta baş verdi');
+            }
+        });
+    }
+
+</script>

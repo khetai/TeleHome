@@ -1,0 +1,159 @@
+﻿@model Contact
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+
+<main>
+    <section class="breadcrumb__area include-bg text-center pt-95 pb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="breadcrumb__content p-relative z-index-1">
+                        <h3 class="breadcrumb__title">@localizer["Bizimlə əlaqə saxlayın..."]</h3>
+                        <div class="breadcrumb__list">
+                            <span><a href="/">@localizer["Əsas səhifə"]</a></span>
+                            <span>@localizer["Əlaqə"]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tp-contact-area pb-100">
+        <div class="container">
+            <div class="tp-contact-inner">
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="tp-contact-wrapper">
+                            <h3 class="tp-contact-title">@localizer["Mesaj göndər"]</h3>
+
+                            <div class="tp-contact-form">
+                                <form action="~/main/contact" method="post">
+                                    <div class="tp-contact-input-wrapper">
+                                        <div class="tp-contact-input-box">
+                                            <div class="tp-contact-input">
+                                                <input asp-for="ContactName" type="text" placeholder="@localizer["Adınız"]">
+                                                <span asp-validation-for="ContactName" class="text-danger"></span>
+                                            </div>
+                                            <div class="tp-contact-input-title">
+                                                <label for="ContactName">@localizer["Adınız"]</label>
+                                            </div>
+                                        </div>
+                                        <div class="tp-contact-input-box">
+                                            <div class="tp-contact-input">
+                                                <input asp-for="ContactEmail" type="email" placeholder="@localizer["nümunə@gmail.com"]">
+                                                <span class="text-danger" asp-validation-for="ContactEmail"></span>
+                                            </div>
+                                            <div class="tp-contact-input-title">
+                                                <label for="ContactEmail">@localizer["E-poçt ünvanınız"]</label>
+                                            </div>
+                                        </div>
+                                        <div class="tp-contact-input-box">
+                                            <div class="tp-contact-input">
+                                                <input asp-for="ContactTitle" type="text" placeholder="@localizer["Başlıq"]">
+                                                <span asp-validation-for="ContactTitle" class="text-danger"></span>
+
+                                            </div>
+                                            <div class="tp-contact-input-title">
+                                                <label for="ContactTitle">@localizer["Başlıq"]</label>
+                                            </div>
+                                        </div>
+                                        <div class="tp-contact-input-box">
+                                            <div class="tp-contact-input">
+                                                <textarea asp-for="ContactMessage" placeholder="@localizer["Mesajınız"]"></textarea>
+                                                <span asp-validation-for="ContactMessage" class="text-danger"></span>
+
+                                            </div>
+                                            <div class="tp-contact-input-title">
+                                                <label for="ContactMessage">@localizer["Mesajınız"]</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tp-contact-btn">
+                                        <button class="hovbutt" style="" type="submit">@localizer["Göndər"]</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="tp-contact-info-wrapper">
+                            <div class="tp-contact-info-item">
+                                <div class="tp-contact-info-icon">
+                                    <span>
+                                        <img src="~/img/contact/contact-icon-1.png" alt="telefon">
+                                    </span>
+                                </div>
+                                <div class="tp-contact-info-content">
+                                    <p data-info="mail"><a href="mailto:info@telehome.az">@localizer["info@telehome.az"]</a></p>
+                                    <p data-info="phone"><a href="https://wa.me/+994703804000">+994 703 80 40 00</a></p>
+                                </div>
+                            </div>
+                            <div class="tp-contact-info-item">
+                                <div class="tp-contact-info-icon">
+                                    <span>
+                                        <img src="~/img/contact/contact-icon-2.png" alt="Iphone 14">
+                                    </span>
+                                </div>
+                                <div class="tp-contact-info-content">
+                                    <p>
+                                        <a href="https://goo.gl/maps/Mq2gxgQm5nCpGtPk7" target="_blank">
+                                            <br> @localizer["Hüseyn Cavid Prospekti, Bakı"]
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="tp-contact-info-item">
+                                <div class="tp-contact-info-icon">
+                                    <span>
+                                        <img src="~/img/contact/contact-icon-3.png" alt="Telehome">
+                                    </span>
+                                </div>
+                                <div class="tp-contact-info-content">
+                                    <div class="tp-contact-social-wrapper mt-5">
+                                        <h4 class="tp-contact-social-title">@localizer["Sosial şəbəkələr"]</h4>
+
+                                        <div class="tp-contact-social-icon">
+                                            <a style="color:blue;" target="_blank" href="https://www.facebook.com/telehome.az"><i class="fa-brands fa-facebook-f"></i></a>
+                                            <a style="color:red;" target="_blank" href="https://www.instagram.com/telehome.electronics/?hl=en"><i class="fa-brands fa-instagram"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tp-map-area pb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="tp-map-wrapper">
+                        <div class="tp-map-hotspot">
+                            <span class="tp-hotspot tp-pulse-border">
+                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="6" cy="6" r="6" fill="#821F40" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="tp-map-iframe">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12157.96906258496!2d49.8159963!3d40.3757812!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307da04d52c9ab%3A0x1571496b45078fe!2sTelehome!5e0!3m2!1sen!2saz!4v1686843098287!5m2!1sen!2saz" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+<style>
+    .tp-contact-btn:hover {
+        background-color:red !important;
+    }
+</style>
+@section scripts{
+<script src="~/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

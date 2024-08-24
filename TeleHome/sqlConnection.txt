@@ -1,0 +1,8 @@
+﻿Scaffold-DbContext "Server=p1420.use1.mysecurecloudhost.com;Database=rmlubeco_telehome;User Id=rmlubeco_telehome;Password=TeleHome@123" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
+
+
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+        optionsBuilder.UseSqlServer("Server=wdb4.my-hosting-panel.com;Database=rmlubeco_telehome;User Id=rmlubeco_telehome;Password=TeleHome@123");
+    }

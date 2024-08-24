@@ -1,0 +1,73 @@
+﻿@using Newtonsoft.Json;
+@using static TeleHome.Controllers.MainController;
+@using Microsoft.AspNetCore.Http;
+@model Order
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+<style>
+   
+</style>
+<main>
+    <section class="breadcrumb__area include-bg pt-95 pb-50">
+        <form method="post" class="s-form" action="/Main/SubmitPayment">
+            <div style="" class="s-form-div">
+                <input hidden name="orderId" value="@Model.OrderId" />
+                <div style="margin:auto">
+                    <div>
+                        <h3>
+                            İstifadəçi məlumatları
+                        </h3>
+                    </div>
+                    <div class="form-group">
+                        <label htmlFor="username">Ad-soyad:</label>
+                        <input class="form-control" value="@Model.OrderUser.UserName" id="username" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label htmlFor="userPhone">Telefon:</label>
+                        <input class="form-control" value="@Model.OrderUser.UserPhone" id="userPhone" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label htmlFor="UserEmail">E-poçt:</label>
+                        <input class="form-control" value="@Model.OrderUser.UserEmail" id="UserEmail" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label htmlFor="UserAddress">Adres:</label>
+                        <input class="form-control" name="Address" required value="@Model.OrderUser.UserAddress" id="UserAddress" />
+                    </div>
+                </div>
+                <div style="margin:auto">
+                    <div class="s-karts">
+                        <h2>Kartlar</h2>
+                        <div>
+                            <label htmlFor="kart" style="position:relative">
+                                <img src="~/img/taksit.png" style="width:150px;" />
+                                <input type="radio" name="kart"  style="position:absolute; top:5px;right:5px" value="BIRKART" id="kart" />
+                            </label>
+                        </div>
+                    </div>
+                    <div class="s-f-radio">
+                        <div>
+                            <label htmlFor="kredit">3 Aylıq:</label>
+                            <input type="radio" name="kredit" value="3" id="kredit" placeholder="3" />
+                        </div>
+                        <div>
+                            <label htmlFor="kredit2">6 Aylıq:</label>
+                            <input type="radio" name="kredit" value="6" id="kredit2" placeholder="6" />
+                        </div>
+                        <div>
+                            <label htmlFor="kredit3">9 Aylıq:</label>
+                            <input type="radio" name="kredit" value="9" id="kredit3" placeholder="9" />
+                        </div>
+                        <div>
+                            <label htmlFor="kredit4">12 Aylıq:</label>
+                            <input type="radio" name="kredit" value="12" id="kredit4" placeholder="12" />
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary tesdiqbtn" style="width: 150px; margin-top:20px;">Təsdiqlə</button>
+        </form>
+
+
+    </section>
+</main>

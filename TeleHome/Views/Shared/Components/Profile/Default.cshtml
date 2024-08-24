@@ -1,0 +1,62 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> locOptions
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="tp-header-action d-flex align-items-center ml-30">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="tp-header-action-item d-none d-lg-block">
+            <a href="~/main/myprofile" class="tp-header-action-btn" style="background-color:white !important;">
+                <i class="fa-solid fa-user ikonlar"></i>
+            </a>
+        </div>
+        <div class="tp-header-action-item d-none d-lg-block">
+            <a href="~/main/basket" class="tp-header-action-btn" style="background-color:white !important;">
+                <i class="fa-solid fa-cart-shopping ikonlar"></i>
+                <span class="tp-header-action-badge bskt spanCount">@ViewBag.BasketCount</span>
+            </a>
+        </div>
+        <div class="tp-header-action-item">
+            <button class="tp-header-action-btn cartmini-open-btn">
+                <i class="fa-solid fa-heart ikonlar"></i>
+                <span class="tp-header-action-badge fvrt spanCount">@ViewBag.FavoriteCount</span>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="tp-header-action-item d-none d-lg-block">
+            <a href="~/main/basket" class="tp-header-action-btn" style="background-color:white !important;">
+                <i class="fa-solid fa-cart-shopping ikonlar"></i>
+                <span class="tp-header-action-badge bskt spanCount">@ViewBag.Count</span>
+            </a>
+        </div>
+        <div class="tp-header-action-item">
+            <a href="~/main/login" class="btn btn-primary" style="width:95px;">
+                @localizer["Daxil ol"]
+            </a>
+        </div>
+    }
+
+    @{
+        var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
+        var cultureList = locOptions.Value.SupportedCultures.Select(x => new SelectListItem { Value = x.Name, Text = x.Name }).ToList();
+        var returnUrl = string.IsNullOrWhiteSpace(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
+    }
+    <div class="tp-header-action-item">
+        <form asp-action="CultureManagement" asp-controller="main" method="post" id="languageChangeOption" asp-route-returnUrl="@returnUrl">
+            <select class="lanChange" name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit()"></select>
+        </form>
+    </div>
+@*    <div class="tp-header-action-item tp-header-hamburger mr-20 d-xl-none">
+        <button type="button" class="tp-offcanvas-open-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="16" viewBox="0 0 30 16">
+                <rect x="10" width="20" height="2" fill="currentColor"></rect>
+                <rect x="5" y="7" width="25" height="2" fill="currentColor"></rect>
+                <rect x="10" y="14" width="20" height="2" fill="currentColor"></rect>
+            </svg>
+        </button>
+    </div>
+*@
+</div>

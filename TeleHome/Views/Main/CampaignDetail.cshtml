@@ -1,0 +1,718 @@
+﻿@using System.Globalization;
+@model CampaignDetailViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+
+<section class="kompaniyalarim">
+    <div class="container">
+        <div class="kompaniyalarsol">
+            <img src="~/sekiller/@Model.Campaigns.CampaignImage" alt="TeleHome">
+        </div>
+        @{
+            CultureInfo azerbaijaniCulture = new CultureInfo("az-Latn-AZ");
+            string formattedStartDate = ((DateTime)Model.Campaigns.CampaignStartDate).ToString("dd MMMM", azerbaijaniCulture);
+            string formattedEndDate = ((DateTime)Model.Campaigns.CampaignEndDate).ToString("dd MMMM", azerbaijaniCulture);
+
+        }
+        <div class="sag">
+            <div class="position-time" startdate="@Model.Campaigns.CampaignStartDate" enddate="@Model.Campaigns.CampaignEndDate">
+                <ul>
+                    <li><span tdays>0</span>@localizer["gün"]&nbsp;-&nbsp;</li>
+                    <li><span thours>0</span>@localizer["saat"]&nbsp;-&nbsp;</li>
+                    <li><span tminutes>0</span>@localizer["dəq"]&nbsp;-&nbsp;</li>
+                    <li><span tseconds>0</span>@localizer["san"]</li>
+                </ul>
+            </div>
+            <span>@formattedStartDate - @formattedEndDate</span>
+            <h2>@Model.Campaigns.CampaignName</h2>
+            <p>@Model.Campaigns.CampaignDescription</p>
+            <div class="parts">
+                <div class="part-company"><a target="_blank" href="tel:+994516661922"><h5>@localizer["Onlayn sifariş"]</h5><p> +994 51 666 19 22</p></a></div>
+                <div class="part-company"><a target="_blank" href="https://wa.me/+994703804000"><h5><i style="margin-right:4%;" class="fa-brands fa-whatsapp"></i>Whatsapp</h5><p> +994703804000</p></a></div>
+                <div class="part-company"><a target="_blank" href="https://www.facebook.com/telehome.az"><h5> <i style="margin-right:4%;" class="fa-brands fa-facebook"></i>Facebook</h5><p>fb.Telehome</p></a></div>
+                <div class="part-company"><a target="_blank" href="https://www.instagram.com/telehome.electronics/"><h5><i style="margin-right:4%;" class="fa-brands fa-instagram"></i>Instagram</h5><p>ig.Telehome</p></a></div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="slide-container swiper">
+        <div class="slide-content">
+            <div class="card-wrapper swiper-wrapper">
+                @foreach (var item1 in Model.ProductList)
+                {
+                    <div class="card swiper-slide">
+                        <div class="product-grid">
+                            <div class="product-image">
+                                <a href="~/main/productdetails/@item1.Product.ProductId" class="image">
+                                    <img class="pic-1" src="~/sekiller/@item1.Product.ProductFirstPhotoUrl" alt="@item1.Product.ProductDeepCategory.DeepCategorySubCategory.SubCategoryName">
+                                </a>
+                                <span class="@(item1.Product.ProductIsSctock==true ? "product-sale" : "product-hot")">@(item1.Product.ProductIsSctock == true ? localizer["Stokda var"] : localizer["Stokda yoxdur"])</span>
+                                <ul class="product-links">
+                                    <li data-productid="@item1.Product.ProductId" onclick="postfavorite('@item1.Product.ProductId')"><a data-tip="@localizer["İstək siyahısına əlavə edin"]"><i class="fas fa-heart @(item1.IsFavorite==true ? "text-danger" : "text-black")"></i></a></li>
+                                    <li data-productid="@item1.Product.ProductId" onclick="postbasket('@item1.Product.ProductId')"><a data-tip="@localizer["Səbət"]"><i class="fa-solid fa-basket-shopping @(item1.IsBasket==true ? "text-primary" : "text-black")"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="title"><a href="#">@(item1.Product.ProductName.Length < 20 ? item1.Product.ProductName.Substring(0, item1.Product.ProductName.Length) : item1.Product.ProductName.Substring(0, 20))</a></h3>
+                                <div class="price">@item1.Product.ProductPrice ₼</div>
+                                @{
+                                    var secondPrice = item1.Product.ProductWithoutPrice;
+                                }
+                                @if (item1.Product.ProductWithoutPrice is not null)
+                                {
+                                    <div class="second-price"><del>@string.Format("{0:N2}", secondPrice) ₼</del></div>
+                                }
+                                <a class="add-to-cart" href="~/main/productdetails/@item1.Product.ProductId">@localizer["Ətraflı bax"]</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section style{
+    <style>
+        .sag {
+            width: 50%;
+            padding: 3%;
+            box-sizing: border-box;
+            border-radius: 0.2cm;
+            border: 1px solid rgb(185, 3, 3);
+        }
+
+            .sag h2 {
+                width: 80%;
+            }
+
+        .parts {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .part-company {
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            width: 25%;
+        }
+
+            .part-company::after {
+                content: "";
+                width: 0.3%;
+                position: absolute;
+                background-color: red;
+                top: 40%;
+                right: 0;
+                height: 40px;
+            }
+
+        .position-time {
+            float: right;
+            background-color: white;
+            padding: 2%;
+            border-radius: 0.4cm;
+            border: 1px solid red;
+            margin-top: -60px;
+        }
+
+            .position-time ul {
+                margin-block-end: 0;
+                margin-block-start: 0;
+                padding-inline-start: 0;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+
+                .position-time ul li {
+                    list-style: none;
+                }
+
+
+        @@media(max-width:768px) {
+            .container {
+                width: 90%;
+                display: block;
+            }
+
+            .sol {
+                width: 100%;
+                margin-bottom: 10%;
+            }
+
+            .sag {
+                padding: 7%;
+                width: 100%;
+            }
+
+                .sag h2 {
+                    width: 100%;
+                    font-size:22px;
+                }
+
+            .parts {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .part-company {
+                text-align: left;
+                width: 48%;
+                padding-top: 5%;
+                border: none;
+            }
+
+                .part-company h5 {
+                    margin-block-end: 0 !important;
+                    margin-block-start: 0 !important;
+                    font-size: 18px;
+                }
+
+                .part-company::after {
+                    width: 0;
+                }
+
+            .position-time {
+                margin-top: -40px;
+            }
+        }
+        /*slide*/
+        .slide-container {
+            max-width: 1510px;
+            margin: auto;
+            width: 100%;
+            padding: 40px 0;
+        }
+
+        .slide-content {
+            margin: 0 40px;
+            overflow: hidden;
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        .card {
+            border-radius: 25px;
+            background-color: #FFF;
+        }
+
+        .image-content,
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 14px;
+        }
+
+        .image-content {
+            position: relative;
+            row-gap: 5px;
+            padding: 25px 0;
+        }
+
+        .overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #4070F4;
+            border-radius: 25px 25px 0 25px;
+        }
+
+            .overlay::before,
+            .overlay::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                bottom: -40px;
+                height: 40px;
+                width: 40px;
+                background-color: #4070F4;
+            }
+
+            .overlay::after {
+                border-radius: 0 25px 0 0;
+                background-color: #FFF;
+            }
+
+        .card-image {
+            position: relative;
+            height: 150px;
+            width: 150px;
+            border-radius: 50%;
+            background: #FFF;
+            padding: 3px;
+        }
+
+            .card-image .card-img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+                border: 4px solid #4070F4;
+            }
+
+        .name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #707070;
+            text-align: center;
+        }
+
+        .button {
+            border: none;
+            font-size: 16px;
+            color: #FFF;
+            padding: 8px 16px;
+            background-color: #4070F4;
+            border-radius: 6px;
+            margin: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .button:hover {
+                background: #265DF2;
+            }
+
+        .swiper-navBtn {
+            color: #6E93f7;
+            transition: color 0.3s ease;
+        }
+
+            .swiper-navBtn:hover {
+                color: #4070F4;
+            }
+
+            .swiper-navBtn::before,
+            .swiper-navBtn::after {
+                font-size: 35px;
+            }
+
+        .swiper-button-next {
+            right: 0;
+        }
+
+        .swiper-button-prev {
+            left: 0;
+        }
+
+        .swiper-pagination-bullet {
+            background-color: #6E93f7;
+            opacity: 1;
+        }
+
+        .swiper-pagination-bullet-active {
+            background-color: #4070F4;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .slide-content {
+                margin: 0 10px;
+            }
+
+            .swiper-navBtn {
+                display: none;
+            }
+        }
+
+
+        .kompaniyalarim {
+            width: 100%;
+            height: auto;
+            padding: 50px 0;
+        }
+
+            .kompaniyalarim .container {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .kompaniyalarim .kompaniyalarsol {
+                width: 48%;
+                height: 370px;
+                overflow: hidden;
+                border-radius: 5px;
+            }
+
+                .kompaniyalarim .kompaniyalarsol img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+            .kompaniyalarim .kompaniyalarsag {
+                width: 45%;
+                height: auto;
+                padding: 15px 0;
+                border: 2px solid rgba(255, 0, 0, 0.29);
+                border-radius: 5px;
+            }
+
+        .kompaniyadate {
+            width: 100%;
+            height: 60px;
+            background-color: white;
+            padding-left: 20px;
+            padding-top: 15px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .tp-product-countdown {
+            width: 40%;
+            margin-top: -12px;
+        }
+
+        @@media(max-width:768px) {
+            .tp-product-countdown {
+                width: 80%;
+                margin: auto;
+                margin-top: 20px;
+            }
+
+            .tp-product-countdown-inner ul li {
+                padding-right: 15px;
+            }
+
+                .tp-product-countdown-inner ul li span {
+                    padding-right: 25px;
+                }
+        }
+
+        .kompaniyadate i {
+            color: orange;
+        }
+
+        .kompaniyadate span {
+            border: 1px solid black;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .kompaniyadate .gerisayim {
+            padding: 10px 20px;
+            font-size: 20px;
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            border: 2px solid red;
+            color: orange;
+        }
+
+        .kompaniyaname {
+            width: 350px;
+            background-color: white;
+            margin: 5px 20px;
+        }
+
+        .kompaniyadesc {
+            width: 90%;
+            height: auto;
+            padding: 0px 0;
+            background-color: white;
+            margin: 0px 20px;
+        }
+
+        .kompaniyaelaqe {
+            width: 100%;
+            height: auto;
+            padding: 5px 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+
+            .kompaniyaelaqe div {
+                width: 30%;
+                height: 80px;
+                display: flex;
+                align-Models: center;
+                justify-content: center;
+                font-size: 18px;
+                flex-wrap: wrap !important;
+                border: 2px solid rgba(255, 0, 0, 0.29);
+                border-radius: 7px;
+            }
+
+                .kompaniyaelaqe div i {
+                    color: green;
+                }
+
+        @@media (max-width:768px) {
+            .kompaniyalarim .kompaniyalarsol {
+                width: 100%;
+                height: 280px;
+                margin: auto;
+                margin-bottom: 20px;
+            }
+
+            .kompaniyalarim .kompaniyalarsag {
+                width: 100%;
+                margin: auto;
+            }
+
+                .kompaniyalarim .kompaniyalarsag span {
+                    margin-left: 20px;
+                }
+
+            .kompaniyalarim .kompaniyadate i {
+                margin-left: 15px;
+            }
+
+            .kompaniyalarim .kompaniyalarsag .gerisayim {
+                top: 60px;
+                right: 120px;
+            }
+
+            .kompaniyalarim .kompaniyalarsag .kompaniyaname {
+                margin-top: 70px;
+            }
+        }
+
+        .tp-collection-countdown .tp-product-countdown ul li, .tp-collection-countdown .tp-product-countdown ul li span, .tp-product-item-3 .tp-product-add-cart-btn-large-wrapper .tp-product-add-cart-btn-large, .tp-product-action-btn-3 .tp-product-tooltip, .tp-product-action-btn-2 .tp-product-tooltip, .tp-footer-style-2 .tp-footer-desc, .tp-footer-style-2 .tp-footer-widget-title, .tp-footer-style-2 .tp-footer-widget ul li a, .tp-footer-style-2 .tp-footer-talk span, .tp-footer-style-2 .tp-footer-talk h4, .tp-footer-style-2 .tp-footer-contact-content p, .tp-footer-style-2 .tp-footer-copyright p, .tp-header-top-black .tp-header-top-menu-item > span {
+            font-family: var(--tp-ff-jost);
+        }
+
+            .tp-collection-countdown .tp-product-countdown ul li:not(:last-child)::after, .tp-category-mobile-menu ul li.has-dropdown > a .dropdown-toggle-btn, .tp-main-menu-mobile ul li.has-dropdown > a .dropdown-toggle-btn, .tp-header-side-menu ul li.has-dropdown > a::after, .offcanvas__categoryssss ul li.has-dropdown > a .dropdown-toggle-btn, .tp-offcanvas-category-toggle::after {
+                font-family: var(--tp-ff-fontawesome);
+            }
+
+            /* transform */
+            .tp-collection-countdown .tp-product-countdown ul li:not(:last-child)::after, .tp-special-arrow button, .tp-featured-slider-arrow button:not(:last-child)::after, .tp-testimonial-arrow button, .tp-testimonial-arrow-5 button:not(:last-child)::after, .tp-feature-border-2 .row [class*=col-] .tp-feature-item-2::after, .tp-feature-border-3 .tp-feature-item-2:not(:last-child)::after, .tp-feature-border-5 .row [class*=col-] .tp-feature-item-5::after, .tp-slider-2-dot.tp-swiper-dot, .tp-slider-3-dot.tp-swiper-dot, .tp-slider-feature-item-3:not(:last-child)::after, .tp-slider-arrow-3 button, .tp-slider-4-dot.tp-swiper-dot, .tp-slider-arrow-4 button, .tp-sidebar-search-input button, .tp-postbox-details-meta span:not(:last-child)::after, .tp-category-mobile-menu ul li.has-dropdown > a .dropdown-toggle-btn, .tp-main-menu-mobile ul li.has-dropdown > a .dropdown-toggle-btn, .tp-header-search-input-box-5 button, .tp-header-search-input-5 span, .tp-header-side-menu ul li.has-dropdown > a::after, .tp-product-tab-2 .nav-tabs .nav-link:not(:first-child)::after, .breadcrumb__list span:not(:last-child)::after, .offcanvas__categoryssss ul li.has-dropdown > a .dropdown-toggle-btn, .tp-offcanvas-category-toggle::after {
+                -webkit-transform: translateY(-50%);
+                -moz-transform: translateY(-50%);
+                -ms-transform: translateY(-50%);
+                -o-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+    </style>
+}
+@section scripts{
+    <script>
+        var swiper = new Swiper(".slide-content", {
+            slidesPerView: 3,
+            spaceBetween: 25,
+            loop: true,
+            centerSlide: 'true',
+            fade: 'true',
+            grabCursor: 'true',
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+                dynamicBullets: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+
+            breakpoints: {
+                0: {
+                    slidesPerView: 1,
+                },
+                520: {
+                    slidesPerView: 2,
+                },
+                950: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+
+
+        function convertToISODate(dateString) {
+            var dateRegex = /^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{4}) (\d{1,2}):(\d{2}):(\d{2}) ([ap]m)$/i;
+            var dateMatch = dateString.match(dateRegex);
+
+            if (!dateMatch) {
+                return null;
+            }
+
+            var day, month, year, hours, minutes, seconds, ampm;
+
+            if (dateString.includes("/")) {
+                day = parseInt(dateMatch[2]);
+                month = parseInt(dateMatch[1]) - 1;
+                year = parseInt(dateMatch[3]);
+            } else {
+                day = parseInt(dateMatch[1]);
+                month = parseInt(dateMatch[2]) - 1;
+                year = parseInt(dateMatch[3]);
+            }
+
+            hours = parseInt(dateMatch[4]);
+            minutes = parseInt(dateMatch[5]);
+            seconds = parseInt(dateMatch[6]);
+            ampm = dateMatch[7].toLowerCase();
+
+            if (ampm === "pm" && hours < 12) {
+                hours += 12;
+            } else if (ampm === "am" && hours === 12) {
+                hours = 0;
+            }
+
+            var formattedDate = new Date(year, month, day, hours, minutes, seconds);
+
+            return formattedDate.toISOString();
+        }
+
+
+
+        var countdownElements = document.querySelectorAll('.position-time');
+
+        countdownElements.forEach(function (countdownElement) {
+            var startDateString = countdownElement.getAttribute('startdate');
+            var endDateString = countdownElement.getAttribute('enddate');
+
+            var startDateISOString = convertToISODate(startDateString);
+            var endDateISOString = convertToISODate(endDateString);
+
+            var countdownTimer = setInterval(function () {
+                var now = new Date();
+
+                var timeDiff = new Date(endDateISOString) - Date.now()
+
+                var days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                countdownElement.querySelector('[tdays]').innerHTML = days;
+                countdownElement.querySelector('[thours]').innerHTML = hours;
+                countdownElement.querySelector('[tminutes]').innerHTML = minutes;
+                countdownElement.querySelector('[tseconds]').innerHTML = seconds;
+
+                if (timeDiff < 0) {
+                    clearInterval(countdownTimer);
+                    countdownElement.innerHTML = '@localizer["Kampaniyanın vaxtı bitib"]';
+                }
+            }, 1000);
+        });
+
+
+        var bskt = document.querySelector('.bskt');
+        var fvrt = document.querySelector('.fvrt');
+        function postfavorite(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            console.log(productId)
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostFavorite',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    console.log(res);
+                    var heartIcon = $(`li[data-productid="${productId}"] i.fa-heart`);
+                    if (heartIcon.hasClass('text-danger')) {
+                        fvrt.textContent = parseInt(fvrt.textContent) - 1;
+                        heartIcon.removeClass('text-danger');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        fvrt.textContent = parseInt(fvrt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-danger');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+        function postbasket(productId) {
+
+            if (!isUserAuthenticated()) {
+                window.location.href = "/main/login";
+                return;
+            }
+            console.log(productId)
+            var formdata = new FormData();
+            formdata.append('productId', productId);
+            $.ajax({
+                type: 'POST',
+                url: '/Main/PostBasket',
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+
+                    console.log(res);
+                    var heartIcon = $(`li[data-productid="${productId}"] i.fa-basket-shopping`);
+                    if (heartIcon.hasClass('text-primary')) {
+                        toastNotif({
+                            text: '@localizer["Məhsulunuz səbətdən uğurla silindi!"]',
+                            color: '#d92402',
+                            timeout: 2000,
+                            icon: 'error'
+                        });
+                        bskt.textContent = parseInt(bskt.textContent) - 1;
+                        heartIcon.removeClass('text-primary');
+                        heartIcon.addClass('text-black');
+                    } else {
+                        toastNotif({
+                            text: '@localizer["Məhsulunuz səbətə uğurla əlavə edildi!"]',
+                            color: '#35ac18',
+                            timeout: 2000,
+                            icon: 'valid'
+                        });
+                        bskt.textContent = parseInt(bskt.textContent) + 1;
+                        heartIcon.removeClass('text-black');
+                        heartIcon.addClass('text-primary');
+                    }
+                },
+                error: function () {
+                    console.log('@localizer["Xəta baş verdi"]');
+                }
+            });
+        }
+
+
+
+    </script>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script>
+            function isUserAuthenticated() {
+                return true;
+            }
+        </script>
+    }
+    else
+    {
+        <script>
+            function isUserAuthenticated() {
+                return false;
+            }
+        </script>
+    }
+
+            </script>
+}

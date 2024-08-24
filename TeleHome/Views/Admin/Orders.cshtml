@@ -1,0 +1,54 @@
+﻿@model List<Order>
+
+
+
+<div id="main-content">
+    <table class="table" id="product-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Adı</th>
+                <th>Sayi</th>
+                <th>Qiymət</th>
+                <th>Tarix</th>
+                <th>odenis</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @foreach (Order item in Model)
+            {
+                <tr postId="@item.OrderId">
+                    <th>@(Model.IndexOf(item) + 1)</th>
+                    <td>@item.OrderUser.UserName @item.OrderUser.UserSurname</td>
+                    <td>@item.OrderBaskets.Count()</td>
+                    <td>@item.OrderMoney ₼</td>
+                    <td>@(((DateTime)item.OrderDate).ToString("dd-MMM-yyyy")) </td>
+                    <td class="stock">@(item.OrderStatus == true ? "ugurlu" : "ugursuz")</td>
+                    <td class=""><a href="/admin/OrderDetails/@item.OrderId">Details</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example" id="first">
+        <ul class="pagination justify-content-center my-3">
+            @{
+                int pgf = !string.IsNullOrEmpty(Context.Request.Query["page"]) ? int.Parse(Context.Request.Query["page"]) : 0;
+            }
+            <li class="page-item @(pgf==0 ? "disabled" : "")">
+                <a class="page-link" href="?page=@(pgf-1)">Geri</a>
+            </li>
+            @for (int i = 0; i < ViewBag.PageCount; i++)
+            {
+                <li class="page-item @(pgf == i ? "active" : "")"><a class="page-link" href="?page=@i">@(i + 1)</a></li>
+            }
+            <li class="page-item @((pgf == (ViewBag.PageCount-1)) ? "disabled": "")">
+                <a class="page-link" href="?page=@(pgf + 1)">İrəli</a>
+            </li>
+        </ul>
+    </nav>
+    <nav id="pagination" aria-label="Page navigation example">
+        <ul class="pagination justify-content-center my-3">
+        </ul>
+    </nav>
+</div>

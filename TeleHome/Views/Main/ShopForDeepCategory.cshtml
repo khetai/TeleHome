@@ -1,0 +1,570 @@
+﻿@model List<IsFavoriteProduct>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<main>
+    <section class="breadcrumb__area include-bg pt-100 pb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-xxl-12">
+                    <div class="breadcrumb__content p-relative z-index-1">
+                        <h3 class="breadcrumb__title">@ViewBag.Sub</h3>
+                        <div class="breadcrumb__list">
+                            <span><a href="/">@localizer["Əsas səhifə"]</a></span>
+                            <span>@ViewBag.Sub</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tp-shop-area pb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-3 col-lg-4">
+                    <form id="search" action="" method="post">
+                        <div class="tp-shop-sidebar mr-10">
+                            <div class="tp-shop-widget mb-35">
+                                <h3 class="tp-shop-widget-title no-border">@localizer["Məhsulun qiyməti"]</h3>
+
+                                <div class="tp-shop-widget-content">
+                                    <div class="card" style="border:none;">
+                                        <div class="price-content">
+                                            <div class="conmin">
+                                                <label>Min</label>
+                                                <p id="min-value">₼ @ViewBag.MinPrice</p>
+                                            </div>
+
+                                            <div class="conmin">
+                                                <label>Max</label>
+                                                <p id="max-value">₼ @ViewBag.MaxPrice</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="range-slider">
+                                            <input type="range" class="min-price" value="@ViewBag.MinPrice" min="@ViewBag.MinPrice" max="@ViewBag.MaxPrice" step="10">
+                                            <input type="range" class="max-price" value="@ViewBag.MaxPrice" min="@ViewBag.MinPrice" max="@ViewBag.MaxPrice" step="10">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tp-shop-top-right d-sm-flex align-items-center">
+                                    <div class="tp-shop-top-select">
+                                        <select id="orderBySelect">
+                                            <option value="">@localizer["Sıralamaq"]</option>
+                                            <option value="name">@localizer["Ada görə"]</option>
+                                            <option value="priceDesc">@localizer["Yüksəkdən Aşağıya"]</option>
+                                            <option value="priceAsc">@localizer["Aşağıdan Yuxarıya"]</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tp-shop-widget mb-50">
+                                <h3 class="tp-shop-widget-title">@localizer["Texniki xüsusiyyət"]</h3>
+
+                                <div class="tp-shop-widget-content">
+                                    <div class="tp-shop-widget-categories">
+                                        <ul id="dropdown-list">
+                                            @foreach (TechCharacteristic techCharacteristic in ViewBag.Deep)
+                                            {
+                                                <li style="cursor:pointer;">
+                                                    <p class="top-level-item">
+                                                        @techCharacteristic.TechCharacteristicName
+                                                        <i class="fa-solid fa-chevron-down"></i>
+                                                    </p>
+                                                    <ul class="dropdown-list">
+                                                        @foreach (var techCharacteristicsContent in techCharacteristic.TechCharacteristicsContents)
+                                                        {
+                                                            <li>
+                                                                <span class="child-item">
+                                                                    <input type="checkbox" name="contentId" class="mg" data-contentid="@techCharacteristic.TechCharacteristicId" value="@techCharacteristicsContent.TechCharacteristicsContentTitle" />
+                                                                    @techCharacteristicsContent.TechCharacteristicsContentTitle
+                                                                </span>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="tp-shop-main-wrapper text-center">
+                        <div class="tp-shop-top mb-45">
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="tp-shop-top-left d-flex align-items-center">
+                                        <div class="tp-shop-top-result">
+                                            <p>@localizer["Ümumi məhsul sayı"]: @ViewBag.Count</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tp-shop-items-wrapper tp-shop-item-primary">
+                            <div class="tab-content" id="productTabContent">
+                                <div class="tab-pane fade show active" id="grid-tab-pane" role="tabpanel" aria-labelledby="grid-tab" tabindex="0">
+                                    <h3 id="axt">@localizer["Məhsul axtarılır"]...</h3>
+                                    <div class="row infinite-container" id="products">
+                                        @foreach (var item in Model)
+                                        {
+                                            <div class="col-md-4 col-sm-6 mt-4">
+                                                <div class="product-grid">
+                                                    <div class="product-image">
+                                                        <a href="~/main/productdetails/@item.Product.ProductId" class="image">
+                                                            <img class="pic-1" src="~/sekiller/@item.Product.ProductFirstPhotoUrl" alt="@item.Product.ProductDeepCategory.DeepCategoryName">
+                                                        </a>
+                                                        <span class="@(item.Product.ProductIsSctock==true ? "product-sale" : "product-hot")">@(item.Product.ProductIsSctock == true ? localizer["Stokda var"] : localizer["Stokda yoxdur"])</span>
+                                                        <ul class="product-links">
+                                                            <li data-productid="@item.Product.ProductId" onclick="postfavorite('@item.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["İstək siyahısına əlavə edin"]"><i class="fas fa-heart @(item.IsFavorite==true ? "text-danger" : "text-black")"></i></a></li>
+                                                            <li data-productid="@item.Product.ProductId" onclick="postbasket('@item.Product.ProductId')"><a href="#" onclick="event.preventDefault();" data-tip="@localizer["Səbət"]"><i class="fa-solid fa-basket-shopping @(item.IsBasket==true ? "text-primary" : "text-black")"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="product-content">
+                                                        <h3 class="title"><a href="#">@(item.Product.ProductName.Length < 20 ? item.Product.ProductName.Substring(0, item.Product.ProductName.Length) : item.Product.ProductName.Substring(0, 20))</a></h3>
+                                                        <div class="price">@item.Product.ProductPrice ₼</div>
+                                                        @{
+                                                            var secondPrice = item.Product.ProductWithoutPrice;
+                                                        }
+                                                        @if (item.Product.ProductWithoutPrice is not null)
+                                                        {
+                                                            <div class="second-price"><del>@string.Format("{0:N2}", secondPrice) ₼</del></div>
+                                                        }
+                                                        <a class="add-to-cart" href="~/main/productdetails/@item.Product.ProductId">@localizer["Ətraflı bax"]</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="infinite-pagination d-none">
+                            <a href="shop.html" class="infinite-next-link">@localizer["Növbəti"]</a>
+                        </div>
+                        <div class="tp-shop-pagination mt-20">
+                            <h3 id="mhsl">@localizer["Heç bir məhsul tapılmadı"]...</h3>
+
+                            @if (Model.Count != 0)
+                            {
+                                <button type="button" id="pagination" class="btn btn-success">@localizer["Daha çox"]</button>
+                            }
+                            else
+                            {
+                                <h3>@localizer["Heç bir məhsul tapılmadı"]...</h3>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@section style{
+    <style>
+        /*range*/
+        .card {
+            /*background-color: #fff;
+                    border-radius: 5px;
+                    padding: 20px;*/
+        }
+
+            .card h4 {
+                color: #000;
+                margin-bottom: 20px;
+                text-align: center;
+                font-weight: 600;
+            }
+
+            .card .price-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                /*margin: 0 30px;*/
+            }
+
+            .card label {
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .card p {
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .card .range-slider {
+                position: relative;
+                margin: 15px 0 30px 0;
+            }
+
+            .card input[type=range] {
+                -webkit-appearance: none;
+                width: 100%;
+                background: transparent;
+                position: absolute;
+                left: 0;
+            }
+
+                .card input[type=range]::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    height: 15px;
+                    width: 15px;
+                    border-radius: 50%;
+                    background: #36b37e;
+                    cursor: pointer;
+                    margin-top: -5px;
+                    position: relative;
+                    z-index: 1;
+                }
+
+                .card input[type=range]::-webkit-slider-runnable-track {
+                    width: 100%;
+                    height: 5px;
+                    background: #e8e8e8;
+                    border-radius: 3px;
+                    border: none;
+                }
+
+                .card input[type=range]::-webkit-slider-thumb {
+                    z-index: 1;
+                    position: relative;
+                }
+
+            .card input.min-price::-webkit-slider-thumb {
+                margin-right: 15px;
+            }
+
+            .card input.max-price::-webkit-slider-thumb {
+                margin-left: 15px;
+            }
+
+        .dropdown-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+            .dropdown-list.active {
+                max-height: 500px;
+            }
+
+        .fa-chevron-down {
+            transition: transform 0.3s ease;
+        }
+
+            .fa-chevron-down.active {
+                transform: rotate(180deg);
+            }
+
+        .top-level-item {
+            font-size: 17px !important;
+        }
+
+        .child-item {
+            font-size: 14px;
+        }
+
+        .mg {
+            margin-right: 7px;
+        }
+    </style>
+}
+
+<script src="~/js/vendor/jquery.js"></script>
+<script>
+    var formdata = new FormData();
+
+    var minValueInput = document.querySelector(".min-price");
+    var maxValueInput = document.querySelector(".max-price");
+
+    minValueInput.addEventListener("input", function () {
+        if (parseInt(minValueInput.value) > parseInt(maxValueInput.value)) {
+            minValueInput.value = maxValueInput.value;
+        }
+    });
+
+    maxValueInput.addEventListener("input", function () {
+        if (parseInt(maxValueInput.value) < parseInt(minValueInput.value)) {
+            maxValueInput.value = minValueInput.value;
+        }
+    });
+
+
+    let minValue = document.getElementById("min-value");
+    let maxValue = document.getElementById("max-value");
+    let minPrice, maxPrice;
+
+    function validateRange(minPrice, maxPrice) {
+        //if (minPrice > maxPrice) {
+        //    let tempValue = maxPrice;
+        //    maxPrice = minPrice;
+        //    minPrice = tempValue;
+        //}
+        minValue.innerHTML = "₼" + minPrice;
+        maxValue.innerHTML = "₼" + maxPrice;
+    }
+
+    const inputElements = document.querySelectorAll(".range-slider input");
+
+    inputElements.forEach((element) => {
+        element.addEventListener("change", (e) => {
+            minPrice = parseInt(inputElements[0].value);
+            maxPrice = parseInt(inputElements[1].value);
+            maxPrice++;
+            validateRange(minPrice, maxPrice);
+        });
+    });
+
+
+    var orderByProductNameAsc = false;
+    var orderByPriceDesc = false;
+    var orderByPriceAsc = false;
+
+    function filterProducts() {
+        var selectElement = document.getElementById("orderBySelect");
+        var selectedValue = selectElement.value;
+
+
+        if (selectedValue === "name") {
+            orderByPriceDesc = false;
+            orderByPriceAsc = false;
+            orderByProductNameAsc = true;
+        } else if (selectedValue === "priceDesc") {
+            orderByProductNameAsc = false;
+            orderByPriceAsc = false;
+            orderByPriceDesc = true;
+        } else if (selectedValue === "priceAsc") {
+            orderByPriceDesc = false;
+            orderByProductNameAsc = false;
+            orderByPriceAsc = true;
+        }
+    }
+    var topLevelItems = document.querySelectorAll(".top-level-item");
+
+    topLevelItems.forEach(function (item) {
+        var dropdownList = item.nextElementSibling;
+        var arrowIcon = item.querySelector(".fa-chevron-down");
+        item.addEventListener("click", function () {
+            dropdownList.classList.toggle("active");
+            arrowIcon.classList.toggle("active");
+        });
+    });
+    var bskt = document.querySelector('.bskt');
+    var fvrt = document.querySelector('.fvrt');
+
+    function postfavorite(productId) {
+        if (!isUserAuthenticated()) {
+            window.location.href = "/main/login";
+            return;
+        }
+        formdata.append('productId', productId);
+        $.ajax({
+            type: 'POST',
+            url: '/Main/PostFavorite',
+            data: formdata,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (res) => {
+                var heartIcon = $(`li[data-productid="${productId}"] i.fa-heart`);
+                if (heartIcon.hasClass('text-danger')) {
+                    fvrt.textContent = parseInt(fvrt.textContent) - 1;
+                    heartIcon.removeClass('text-danger');
+                    heartIcon.addClass('text-black');
+                } else {
+                    fvrt.textContent = parseInt(fvrt.textContent) + 1;
+                    heartIcon.removeClass('text-black');
+                    heartIcon.addClass('text-danger');
+                }
+            },
+            error: function () {
+                console.log('Xəta baş verdi');
+            }
+        });
+    }
+
+    function postbasket(productId) {
+
+        // if (!isUserAuthenticated()) {
+        //     window.location.href = "/main/login";
+        //     return;
+        // }
+        var formdata = new FormData();
+        formdata.append('productId', productId);
+        $.ajax({
+            type: 'POST',
+            url: '/Main/PostBasket',
+            data: formdata,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (res) => {
+
+                var heartIcon = $(`li[data-productid="${productId}"] i.fa-basket-shopping`);
+                if (heartIcon.hasClass('text-primary')) {
+                    toastNotif({
+                        text: '@localizer["Məhsulunuz səbətdən uğurla silindi!"]',
+                        color: '#d92402',
+                        timeout: 2000,
+                        icon: 'error'
+                    });
+                    bskt.textContent = parseInt(bskt.textContent) - 1;
+                    heartIcon.removeClass('text-primary');
+                    heartIcon.addClass('text-black');
+                } else {
+                    toastNotif({
+                        text: '@localizer["Məhsulunuz səbətə uğurla əlavə edildi!"]',
+                        color: '#35ac18',
+                        timeout: 2000,
+                        icon: 'valid'
+                    });
+                    bskt.textContent = parseInt(bskt.textContent) + 1;
+                    heartIcon.removeClass('text-black');
+                    heartIcon.addClass('text-primary');
+                }
+            },
+            error: function () {
+                console.log('@localizer["Xəta baş verdi"]');
+            }
+        });
+    }
+
+
+    $("#axt").hide();
+    const path = window.location.pathname.split('/');
+    const id = path[path.length - 1];
+    let page = 0;
+    $('#pagination').click(function () {
+        page++;
+        performSearch();
+    });
+    $('#search').submit(function (e) {
+        $("#axt").show();
+        $('#products').empty()
+        e.preventDefault();
+        page = 0;
+        performSearch();
+    });
+    $('#search input, #search select').change(() => {
+        filterProducts();
+        $("#axt").show();
+        $('#products').empty()
+        page = 0;
+        $('#search').submit()
+    })
+    $("#mhsl").hide()
+
+    function performSearch() {
+        let formdata = new FormData($('#search')[0]);
+        formdata.append("id", id);
+        var techCharacteristicNames = [];
+
+        var checkboxes = document.querySelectorAll('input[name="contentId"]:checked');
+        checkboxes.forEach(function (checkbox) {
+            var contentId = checkbox.getAttribute("data-contentid");
+            techCharacteristicNames.push(contentId);
+        });
+        for (var i = 0; i < techCharacteristicNames.length; i++) {
+            formdata.append('techCharacteristicIds', techCharacteristicNames[i]);
+        }
+        var checkedValues = [];
+        $('input[name="contentId"]:checked').each(function () {
+            var value = $(this).val();
+            checkedValues.push(value);
+        });
+
+        for (var i = 0; i < checkedValues.length; i++) {
+            formdata.append('techCharacteristicsContentTitles', checkedValues[i]);
+        }
+        formdata.append("offset", page*6);
+        formdata.append('orderByPriceAsc', orderByPriceAsc);
+        formdata.append('orderByPriceDesc', orderByPriceDesc);
+        formdata.append('orderByProductNameAsc', orderByProductNameAsc);
+        $("#mhsl").hide()
+
+        formdata.append('minPrice', minPrice);
+        formdata.append('maxPrice', maxPrice);
+        console.log(minPrice)
+        console.log(maxPrice)
+        console.log(orderByPriceAsc)
+        console.log(orderByProductNameAsc)
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: '/Main/FilteredProducts',
+            data: formdata,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: (res) => {
+                $("#axt").hide();
+                if ($(res).length == 0) {
+                    $("#mhsl").show()
+                    $("#pagination").hide()
+                }
+                else {
+                    $("#pagination").show()
+
+                }
+                console.log(res);
+                $(res).each(function () {
+                    $('#products').append(`
+                                           <div class="col-md-4 col-sm-6 mt-4">
+                                                                          <div class="product-grid">
+                                                                              <div class="product-image">
+                                                                                      <a href="/main/productdetails/${this.productId}" class="image">
+                                                                                                              <img class="pic-1" src="~/sekiller/${this.productFirstURL}" alt="${this.productName}">
+                                                                                  </a>
+
+                                                                                                  <span class="${this.productIsSctock ? "product-sale" : "product-hot"}">${this.productIsSctock ? "Stokda var" : "Stokda yoxdur"}</span>
+                                                                                  <ul class="product-links">
+                                                                                                              <li data-productid="${this.productId}"  onclick="postfavorite('${this.productId}')"><a href="#" onclick="event.preventDefault();" data-tip="İstək siyahısına əlavə edin"><i class="fas fa-heart ${this.isInBasket ? "text-danger" : "text-black"}"></i></a></li>
+                                                                                                              <li data-productid="${this.productId}" onclick="postbasket('${this.productId}')"><a href="#" onclick="event.preventDefault();" data-tip="Səbət" ><i class="fa-solid fa-basket-shopping ${this.isInFavorite ? "text-primary" : "text-black"}"></i></a></li>
+                                                                                  </ul>
+                                                                              </div>
+                                                                              <div class="product-content">
+                                                                                              <h3 class="title"><a href="#">${this.productName.length < 20 ? this.productName.substring(0, this.productName.length) : this.productName.substring(0, 20)}</a></h3>
+                                                                                      <div class="price">${this.productPrice} ₼</div>
+                                                                                          <a class="add-to-cart" href="/main/productdetails/${this.productId}">Ətraflı bax</a>
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                  `);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+                console.log(status);
+                console.log(error);
+            }
+        });
+    }
+</script>
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <script>
+        function isUserAuthenticated() {
+            return true;
+        }
+    </script>
+}
+else
+{
+    <script>
+        function isUserAuthenticated() {
+            return false;
+        }
+    </script>
+}
+

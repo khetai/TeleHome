@@ -1,0 +1,29 @@
+﻿@*@model List<CategoryWithCount>
+
+@foreach (var item in Model)
+{
+    <div class="col">
+        <div class="tp-product-category-item text-center mb-40">
+            <div class="tp-product-category-thumb fix">
+                <a href="~/main/shopforsubcategory/@item.SubCategory.SubCategoryId">
+                    <img src="../sekiller/@item.SubCategory.SubCategoryPhotoUrl" alt="@item.SubCategory.SubCategoryName" class="subc lazy">
+                </a>
+            </div>
+            <div class="tp-product-category-content">
+                <h3 class="tp-product-category-title">
+                    <a href="~/main/shopforsubcategory/@item.SubCategory.SubCategoryId">@item.SubCategory.SubCategoryName</a>
+                </h3>
+                <p>@item.SubCategoryCount Məhsul</p>
+            </div>
+        </div>
+    </div>
+}
+
+    <style>
+        .subc {
+            border-radius: 60%;
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+        }
+    </style>*@

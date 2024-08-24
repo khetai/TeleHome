@@ -1,0 +1,42 @@
+﻿@model ICollection<Campaign>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<div class="owl-carousel carousel-second owl-theme">
+    @foreach (var item in Model)
+    {
+
+        string active = null;
+
+        @if (item.CampaignId == ViewBag.FirstCampaignId)
+        {
+            active = "active";
+        }
+        <div class="item campaign-card">
+            <div class="item @active">
+                <div class="col-md-12 p-0"><img src="~/sekiller/@item.CampaignImage" alt="@item.CampaignName" class="d-block" style="width:100%"></div>
+                <div class="col-md-10 p-0 mx-auto">
+                    <br/>
+                    <h3>@item.CampaignName</h3>
+                </div>
+                <div class="row">
+                    
+                    <div class="col-md-10 p-0 mx-auto">
+                        <h6 class="text-danger">@(((DateTime)item.CampaignStartDate).ToString("dd-MMM-yyyy")) - @(((DateTime)item.CampaignEndDate).ToString("dd-MMM-yyyy"))</h6>
+                        <hr>
+                        <div class="tp-product-countdown" startdate="@item.CampaignStartDate" enddate="@item.CampaignEndDate">
+                            <div class="tp-product-countdown-inner">
+                                <h5 tr-info></h5>
+                                <ul>
+                                    <li><span tdays>0</span> @localizer["Gün"]</li>
+                                    <li><span thours>0</span>@localizer["Saat"]</li>
+                                    <li><span tminutes>0</span>@localizer["Dəqiqə"]</li>
+                                    <li><span tseconds>0</span>@localizer["Saniyə"]</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
